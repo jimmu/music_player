@@ -59,7 +59,8 @@ public class Main {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
-        System.in.read();
+        //System.in.read();
+	    try {Thread.sleep(1000*60*60*4);}catch(InterruptedException e){}
         server.stop();
     }
 }
