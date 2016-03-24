@@ -24,10 +24,4 @@ public class MyResource {
         return "Got it!";
     }
 
-    @GET
-    @Path("foo")
-    @Produces(MediaType.APPLICATION_JSON)
-    public FilesystemEntryBean foo() {
-        return new FilesystemEntryBean("Got it");
-    }
 }
