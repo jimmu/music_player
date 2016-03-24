@@ -39,8 +39,8 @@ public class FileBrowser {
                 files.add(new FilesystemEntryBean(file.getName(),
                                                   fullpath.hashCode(),
                                                   shortPath,
-                                                  "files/list?path="+path,
-                                                  "play?path="+path));
+                                                  "files/list?path="+shortPath,
+                                                  "play?path="+shortPath));
             } 
         }
         catch(IOException e){
