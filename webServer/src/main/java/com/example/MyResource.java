@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import com.example.model.FilesystemEntryBean;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -21,5 +22,12 @@ public class MyResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String getIt() {
         return "Got it!";
+    }
+
+    @GET
+    @Path("foo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public FilesystemEntryBean foo() {
+        return new FilesystemEntryBean("Got it");
     }
 }
