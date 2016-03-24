@@ -39,11 +39,12 @@ public class FileBrowser {
                 files.add(new FilesystemEntryBean(file.getName(),
                                                   fullpath.hashCode(),
                                                   shortPath,
-                                                  "files/list?path="+path));
+                                                  "files/list?path="+path,
+                                                  "play?path="+path));
             } 
         }
         catch(IOException e){
-            files.add(new FilesystemEntryBean(e.toString(), 0, "", ""));
+            files.add(new FilesystemEntryBean(e.toString(), 0, "", "", ""));
         }
         return files;
     }

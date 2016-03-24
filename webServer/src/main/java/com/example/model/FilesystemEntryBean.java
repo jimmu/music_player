@@ -9,13 +9,15 @@ public class FilesystemEntryBean {
   public Integer id;
   public String path;
   public String listActionUrl;
+  public String playActionUrl;
 
   public FilesystemEntryBean(){}
 
-  public FilesystemEntryBean(String name, Integer id, String path, String listActionUrl){
+  public FilesystemEntryBean(String name, Integer id, String path, String listActionUrl, String playActionUrl){
     this.name = name;
     this.id = id;
     this.path = path;
     this.listActionUrl = listActionUrl;
+    this.playActionUrl = playActionUrl;
   }
 }
