@@ -1,4 +1,4 @@
-package com.example.model;
+package com.bobbins.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -10,13 +10,15 @@ public class FilesystemEntryBean {
   public String path;
   public String listActionUrl;
   public String playActionUrl;
+  public Boolean isLeaf;
 
   public FilesystemEntryBean(){}
 
-  public FilesystemEntryBean(String name, Integer id, String path, String listActionUrl, String playActionUrl){
+  public FilesystemEntryBean(String name, Integer id, String path, Boolean isLeaf, String listActionUrl, String playActionUrl){
     this.name = name;
     this.id = id;
     this.path = path;
+    this.isLeaf = isLeaf;
     this.listActionUrl = listActionUrl;
     this.playActionUrl = playActionUrl;
   }

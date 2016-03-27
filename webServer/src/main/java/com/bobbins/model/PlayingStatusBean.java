@@ -1,4 +1,4 @@
-package com.example.model;
+package com.bobbins.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 

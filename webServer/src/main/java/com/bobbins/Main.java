@@ -1,4 +1,4 @@
-package com.example;
+package com.bobbins;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.ws.rs.ext.ContextResolver;
 
@@ -36,9 +34,9 @@ public class Main {
 
     public static ResourceConfig createApp(){ 
         // create a resource config that scans for JAX-RS resources and providers
-        // in com.example package
+        // in com.bobbins package
         return new ResourceConfig()
-               .packages("com.example")
+               .packages("com.bobbins")
                .register(createMoxyJsonResolver());
     }
 
