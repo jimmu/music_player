@@ -5,7 +5,7 @@ package com.bobbins;
  */
 public class PlayerFactory {
 
-    private static Player instance = new Player();
+    private static MPDPlayer instance = new MPDPlayer();    //Linux specific. TODO - make this cope with other OSes or tests
 
     public static Player getPlayer(){
         return instance;

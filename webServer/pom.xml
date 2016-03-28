@@ -35,6 +35,12 @@
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
+        <!-- To control the music player daemon -->
+        <dependency>
+            <groupId>net.thejavashop</groupId>
+            <artifactId>javampd</artifactId>
+            <version>5.0.3</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
