@@ -11,6 +11,7 @@ public class Player {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    //@Path("play")
     public PlayingStatusBean play(@QueryParam("path") String path) {
         return PlayerFactory.getPlayer().play(path);
     }
@@ -21,5 +22,12 @@ public class Player {
     public PlayingStatusBean status() {
         return PlayerFactory.getPlayer().getStatus();
     }
- 
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("volume")
+    public PlayingStatusBean quieter(@QueryParam("volume") Integer volume) {
+        return PlayerFactory.getPlayer().volume(volume);
+    }
+
 }
