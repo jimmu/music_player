@@ -49,6 +49,7 @@ function volume(url){
 
 function renderVolume(json){
     var volumeSection = d3.select("#volume").datum(json);
+    volumeSection.html(""); //TODO. This feels a bit non-d3. But works for me.
     volumeSection.append("span").text(" - ")
         .on("click", (function(d){
             volume(d.volumeDownUrl);
