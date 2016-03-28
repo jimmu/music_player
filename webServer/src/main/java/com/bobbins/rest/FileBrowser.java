@@ -37,12 +37,12 @@ public class FileBrowser {
                 for (File file : allFilesAndDirs) {
                     String fullPath = file.getCanonicalPath();
                     String shortPath = fullPath.substring(rootPath.length() + 1);
-                    System.out.println(file.getName()+" is a leaf? "+!file.isDirectory());
+                    String listUrl = (file.isDirectory()? "files/list?path=" + shortPath : null);
                     files.add(new FilesystemEntryBean(file.getName(),
                             fullPath.hashCode(),
                             shortPath,
                             !file.isDirectory(),
-                            "files/list?path=" + shortPath,
+                            listUrl,
                             "play?path=" + shortPath));
                 }
             }

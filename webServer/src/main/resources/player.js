@@ -34,6 +34,7 @@ function hello(url, thingToSelect) {
 function play(url){
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
-    console.log(json);
-    });
+    console.log("Playing this... "+json);
+    d3.select("#nowPlaying").datum(json).text(function(d){return d.path});
+  });
 }
