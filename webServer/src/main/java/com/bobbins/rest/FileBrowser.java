@@ -29,7 +29,7 @@ public class FileBrowser {
         System.out.println("Listing "+path);
         com.bobbins.Player player = PlayerFactory.getPlayer();
         try {
-            return player.list();
+            return player.list(path);
         } catch (PlayerException e) {
             e.printStackTrace();
         }
