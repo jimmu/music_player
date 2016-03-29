@@ -2,6 +2,7 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+import org.bff.javampd.exception.MPDPlayerException;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import java.util.List;
  */
 public class PlainPlayer implements Player {
     private String rootPath = null;
+    private String nowPlayingPath = null;
+    private Integer volume = 20;
 
     @Override
     public List<FilesystemEntryBean> list(String path) throws PlayerException {
@@ -45,16 +48,20 @@ public class PlainPlayer implements Player {
 
     @Override
     public PlayingStatusBean play(String playThis) throws PlayerException {
-        return null;
+        System.out.println("Play: "+playThis);
+        nowPlayingPath = playThis;
+        return getStatus();
     }
 
     @Override
     public PlayingStatusBean getStatus() throws PlayerException {
-        return null;
+        return new PlayingStatusBean(nowPlayingPath, volume);   //TODO. Use something nicer than the path.
     }
 
     @Override
     public PlayingStatusBean volume(int volume) throws PlayerException {
-        return null;
+        System.out.println("Set volume to "+volume);
+        this.volume = volume;
+        return new PlayingStatusBean(nowPlayingPath, volume);
     }
 }

@@ -15,16 +15,10 @@ import java.util.List;
  */
 public class MPDPlayer implements Player{
 
-    private String nowPlayingPath = null;
-    private Integer volume = 20;
     private MPD mpd;
 
-    public MPDPlayer(){
-        try {
-            mpd = new MPD.Builder().build();
-        } catch (MPDConnectionException e) {
-            e.printStackTrace();
-        }
+    public MPDPlayer() throws MPDConnectionException {
+        mpd = new MPD.Builder().build();
     }
 
     @Override
@@ -42,23 +36,19 @@ public class MPDPlayer implements Player{
     }
 
     public PlayingStatusBean play(String playThis) throws PlayerException {
-        System.out.println("Play: "+playThis);
-        nowPlayingPath = playThis;
-        return getStatus();
+        return null;
     }
 
     public PlayingStatusBean getStatus() throws PlayerException {
-        return new PlayingStatusBean(nowPlayingPath, volume);   //TODO. Use something nicer than the path.
+        return null;
     }
 
     public PlayingStatusBean volume(int volume) throws PlayerException {
-        System.out.println("Set volume to "+volume);
-        this.volume = volume;
         try {
             mpd.getPlayer().setVolume(volume);
         } catch (MPDPlayerException e) {
             throw new PlayerException(e);
         }
-        return new PlayingStatusBean(nowPlayingPath, volume);
+        return new PlayingStatusBean("foo", volume);
     }
 }
