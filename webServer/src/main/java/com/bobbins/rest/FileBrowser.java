@@ -5,6 +5,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import com.bobbins.*;
 import com.bobbins.model.FilesystemEntryBean;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,8 +15,6 @@ import java.io.IOException;
 
 @Path("files")
 public class FileBrowser {
-
-    private String rootPath = null;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -27,30 +27,13 @@ public class FileBrowser {
     @Path("list")
     public List<FilesystemEntryBean> list(@QueryParam("path") String path) {
         System.out.println("Listing "+path);
-        List<FilesystemEntryBean> files = new ArrayList<FilesystemEntryBean>();
+        com.bobbins.Player player = PlayerFactory.getPlayer();
         try {
-            if (rootPath == null) {
-                rootPath = new File(".").getCanonicalPath();
-            }
-            File[] allFilesAndDirs = new File(path).listFiles();
-            if (allFilesAndDirs != null) {
-                for (File file : allFilesAndDirs) {
-                    String fullPath = file.getCanonicalPath();
-                    String shortPath = fullPath.substring(rootPath.length() + 1);
-                    String listUrl = (file.isDirectory()? "files/list?path=" + shortPath : null);
-                    files.add(new FilesystemEntryBean(file.getName(),
-                            fullPath.hashCode(),
-                            shortPath,
-                            !file.isDirectory(),
-                            listUrl,
-                            "play?path=" + shortPath));
-                }
-            }
+            return player.list();
+        } catch (PlayerException e) {
+            e.printStackTrace();
         }
-        catch(IOException e){
-            files.add(new FilesystemEntryBean(e.toString(), 0, "", false, "", ""));
-        }
-        return files;
+        return null; //TODO return a 500
     }
 
 }
