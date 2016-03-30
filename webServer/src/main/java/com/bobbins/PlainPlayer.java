@@ -18,12 +18,13 @@ public class PlainPlayer implements Player {
     private Integer volume = 20;
 
     @Override
-    public List<FilesystemEntryBean> list(String path) throws PlayerException {
+    public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
         List<FilesystemEntryBean> files = new ArrayList<FilesystemEntryBean>();
         try {
             if (rootPath == null) {
                 rootPath = new File(".").getCanonicalPath();
             }
+            String path = artist + File.separator + "album";
             File[] allFilesAndDirs = new File(path).listFiles();
             if (allFilesAndDirs != null) {
                 for (File file : allFilesAndDirs) {
@@ -47,7 +48,8 @@ public class PlainPlayer implements Player {
     }
 
     @Override
-    public PlayingStatusBean play(String playThis) throws PlayerException {
+    public PlayingStatusBean play(String artist, String album, String song) throws PlayerException {
+        String playThis = artist+":"+album+":"+song;
         System.out.println("Play: "+playThis);
         nowPlayingPath = playThis;
         return getStatus();

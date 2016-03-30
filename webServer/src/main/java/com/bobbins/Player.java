@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface Player {
 
-    public List<FilesystemEntryBean> list(String path) throws PlayerException;
+    public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException;
 
-    public PlayingStatusBean play(String playThis) throws PlayerException;
+    public PlayingStatusBean play(String artist, String album, String song) throws PlayerException;
     public PlayingStatusBean getStatus() throws PlayerException;
     public PlayingStatusBean volume(int volume) throws PlayerException;
 }

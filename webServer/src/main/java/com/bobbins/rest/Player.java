@@ -12,10 +12,27 @@ public class Player {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    //@Path("play")
-    public PlayingStatusBean play(@QueryParam("path") String path) {
+    @Path("{artist}")
+    public PlayingStatusBean play(@PathParam("artist") String artist){
+        return play(artist, null);
+    }
+   
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{artist}/{album}")
+    public PlayingStatusBean play(@PathParam("artist") String artist,
+                                  @PathParam("album") String album){
+        return play(artist, album, null);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{artist}/{album}/{song}")
+    public PlayingStatusBean play(@PathParam("artist") String artist,
+                                  @PathParam("album") String album,
+                                  @PathParam("song") String song){
         try {
-            return PlayerFactory.getPlayer().play(path);
+            return PlayerFactory.getPlayer().play(artist, album, song);
         } catch (PlayerException e) {
             e.printStackTrace();
         }

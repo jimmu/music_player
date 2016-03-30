@@ -6,6 +6,9 @@ import org.bff.javampd.MPD;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.objects.MPDArtist;
+import org.bff.javampd.objects.MPDAlbum;
+import org.bff.javampd.objects.MPDSong;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +25,32 @@ public class MPDPlayer implements Player{
     }
 
     @Override
-    public List<FilesystemEntryBean> list(String path) throws PlayerException {
+    public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
         List<FilesystemEntryBean> files = new ArrayList<>();
+        try{
+	    if (artist == null){
+		for (MPDArtist thisArtist: mpd.getDatabase().listAllArtists()){ 
+		    files.add(new FilesystemEntryBean(thisArtist.getName(), null, null));
+		}
+	    }
+	    else {
+		if (album == null){
+		    for (MPDAlbum thisAlbum : mpd.getDatabase().listAlbumsByArtist(new MPDArtist(artist))){
+			files.add(new FilesystemEntryBean(artist, thisAlbum.getName(), null));
+		    }
+		}
+		else{
+		    for (MPDSong song : mpd.getDatabase().findAlbumByArtist(new MPDArtist(artist), new MPDAlbum(album))){
+			files.add(new FilesystemEntryBean(artist, album, song.getName()));
+		    }
+		}
+	    }
+        }
+        catch(MPDDatabaseException e){
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
+/*
         try {
             for(String file : mpd.getDatabase().listAllFiles()){
                 files.add(new FilesystemEntryBean(file, 0, file, false, "files/list?path="+file, "play?path="+file));
@@ -32,10 +59,11 @@ public class MPDPlayer implements Player{
             e.printStackTrace();
             throw new PlayerException(e);
         }
+*/
         return files;
     }
 
-    public PlayingStatusBean play(String playThis) throws PlayerException {
+    public PlayingStatusBean play(String artist, String album, String song) throws PlayerException {
         return null;
     }
 

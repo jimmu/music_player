@@ -13,7 +13,7 @@ public class PlayerFactory {
         if (instance == null){
             try {
                 instance = new MPDPlayer();
-                instance.list(".");
+                instance.list(".", null);
             } catch (Exception e) {
                 System.out.println("No MPD - falling back to filesystem");
                 instance = new PlainPlayer();
