@@ -45,7 +45,7 @@ public class FileBrowser {
                 //Enrich this entry with urls.
                 if (entry.artist != null){
                    entry.setPlayActionUrl("play/"+entry.artist);
-                   entry.setPlayActionUrl("files/list/"+entry.artist);
+                   entry.setPlayActionUrl("list/"+entry.artist);
                    if (entry.album != null){
                        entry.setPlayActionUrl(entry.playActionUrl+"/"+entry.album);
                        entry.setListActionUrl(entry.listActionUrl+"/"+entry.album);

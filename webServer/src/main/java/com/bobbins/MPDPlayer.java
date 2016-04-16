@@ -28,38 +28,28 @@ public class MPDPlayer implements Player{
     public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
         List<FilesystemEntryBean> files = new ArrayList<>();
         try{
-	    if (artist == null){
-		for (MPDArtist thisArtist: mpd.getDatabase().listAllArtists()){ 
-		    files.add(new FilesystemEntryBean(thisArtist.getName(), null, null));
-		}
-	    }
-	    else {
-		if (album == null){
-		    for (MPDAlbum thisAlbum : mpd.getDatabase().listAlbumsByArtist(new MPDArtist(artist))){
-			files.add(new FilesystemEntryBean(artist, thisAlbum.getName(), null));
-		    }
-		}
-		else{
-		    for (MPDSong song : mpd.getDatabase().findAlbumByArtist(new MPDArtist(artist), new MPDAlbum(album))){
-			files.add(new FilesystemEntryBean(artist, album, song.getName()));
-		    }
-		}
-	    }
+            if (artist == null || artist.isEmpty()){
+                for (MPDArtist thisArtist: mpd.getDatabase().listAllArtists()){
+                    files.add(new FilesystemEntryBean(thisArtist.getName(), null, null));
+                }
+            }
+            else {
+                if (album == null || album.isEmpty()){
+                    for (MPDAlbum thisAlbum : mpd.getDatabase().listAlbumsByArtist(new MPDArtist(artist))){
+                        files.add(new FilesystemEntryBean(artist, thisAlbum.getName(), null));
+                    }
+                }
+                else{
+                    for (MPDSong song : mpd.getDatabase().findAlbumByArtist(new MPDArtist(artist), new MPDAlbum(album))){
+                        files.add(new FilesystemEntryBean(artist, album, song.getName()));
+                    }
+                }
+            }
         }
         catch(MPDDatabaseException e){
             e.printStackTrace();
             throw new PlayerException(e);
         }
-/*
-        try {
-            for(String file : mpd.getDatabase().listAllFiles()){
-                files.add(new FilesystemEntryBean(file, 0, file, false, "files/list?path="+file, "play?path="+file));
-            }
-        } catch (MPDDatabaseException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
-*/
         return files;
     }
 
