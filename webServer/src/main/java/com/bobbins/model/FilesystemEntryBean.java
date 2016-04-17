@@ -34,6 +34,10 @@ public class FilesystemEntryBean {
     this.playActionUrl = url;
   }
 
+  public void setName(String name) {
+    this.name = name;
+  }
+
   // Possibly delete this
   public FilesystemEntryBean(String name, Integer id, String path, Boolean isLeaf, String listActionUrl, String playActionUrl){
     this.name = name;

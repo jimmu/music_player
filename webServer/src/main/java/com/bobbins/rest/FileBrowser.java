@@ -46,12 +46,15 @@ public class FileBrowser {
                 if (entry.artist != null ){
                    entry.setPlayActionUrl("play/"+entry.artist);
                    entry.setListActionUrl("list/"+entry.artist);
+                    entry.setName(entry.artist);
                    if (entry.album != null){
                        entry.setPlayActionUrl(entry.playActionUrl+"/"+entry.album);
                        entry.setListActionUrl(entry.listActionUrl+"/"+entry.album);
+                       entry.setName(entry.album);
                        if (entry.song != null){
                            entry.setPlayActionUrl(entry.playActionUrl+"/"+entry.song);
                            entry.setListActionUrl(null);
+                           entry.setName(entry.song);
                        }
                    }
                 }
