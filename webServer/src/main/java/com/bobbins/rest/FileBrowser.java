@@ -43,9 +43,9 @@ public class FileBrowser {
             List<FilesystemEntryBean> musicEntries = player.list(artist, album);
             for (FilesystemEntryBean entry : musicEntries){
                 //Enrich this entry with urls.
-                if (entry.artist != null){
+                if (entry.artist != null ){
                    entry.setPlayActionUrl("play/"+entry.artist);
-                   entry.setPlayActionUrl("list/"+entry.artist);
+                   entry.setListActionUrl("list/"+entry.artist);
                    if (entry.album != null){
                        entry.setPlayActionUrl(entry.playActionUrl+"/"+entry.album);
                        entry.setListActionUrl(entry.listActionUrl+"/"+entry.album);
