@@ -38,13 +38,13 @@ public class FilesystemEntryBean {
     this.name = name;
   }
 
-  // Possibly delete this
-  public FilesystemEntryBean(String name, Integer id, String path, Boolean isLeaf, String listActionUrl, String playActionUrl){
-    this.name = name;
-    this.id = id;
-    this.path = path;
-    this.isLeaf = isLeaf;
-    this.listActionUrl = listActionUrl;
-    this.playActionUrl = playActionUrl;
-  }
+//  // Possibly delete this
+//  public FilesystemEntryBean(String name, Integer id, String path, Boolean isLeaf, String listActionUrl, String playActionUrl){
+//    this.name = name;
+//    this.id = id;
+//    this.path = path;
+//    this.isLeaf = isLeaf;
+//    this.listActionUrl = listActionUrl;
+//    this.playActionUrl = playActionUrl;
+//  }
 }

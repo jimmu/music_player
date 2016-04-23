@@ -54,7 +54,8 @@ public class MPDPlayer implements Player{
     }
 
     public PlayingStatusBean play(String artist, String album, String song) throws PlayerException {
-        return null;
+        System.out.println("Play "+artist+"/"+album+"/"+song);
+        return new PlayingStatusBean();
     }
 
     public PlayingStatusBean getStatus() throws PlayerException {

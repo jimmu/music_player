@@ -28,20 +28,29 @@ public class PlainPlayer implements Player {
             File[] allFilesAndDirs = new File(path).listFiles();
             if (allFilesAndDirs != null) {
                 for (File file : allFilesAndDirs) {
-                    String fullPath = file.getCanonicalPath();
-                    String shortPath = fullPath.substring(rootPath.length() + 1);
-                    String listUrl = (file.isDirectory()? "files/list?path=" + shortPath : null);
-                    files.add(new FilesystemEntryBean(file.getName(),
-                            fullPath.hashCode(),
-                            shortPath,
-                            !file.isDirectory(),
-                            listUrl,
-                            "play?path=" + shortPath));
+                    String[] bits = file.getPath().split(File.separator);
+                    String thisArtist = null;
+                    String thisAlbum = null;
+                    String song = null;
+                    if (bits.length > 0) {
+                        thisArtist = bits[0];
+                        if (bits.length > 1) {
+                            thisAlbum = bits[1];
+                            if (bits.length > 2) {
+                                song = bits[2];
+                            }
+                        }
+                    }
+                    FilesystemEntryBean entry = new FilesystemEntryBean(thisArtist, thisAlbum, song);
+                    entry.setName(file.getPath());
+                    entry.setListActionUrl("list/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
+                    entry.setPlayActionUrl("play/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
+                    files.add(entry);
                 }
             }
         }
         catch(IOException e){
-            files.add(new FilesystemEntryBean(e.toString(), 0, "", false, "", ""));
+            files.add(new FilesystemEntryBean(e.toString(), "oh", "dear"));
         }
         return files;
 
