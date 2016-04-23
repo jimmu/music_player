@@ -7,8 +7,9 @@ function hello(url, thingToSelect) {
     .selectAll("div").data(json)
       .enter()
       .append("div")
-      .classed("file", function(d){return d.isLeaf})
-      .classed("directory", function(d){return !d.isLeaf});
+      .classed("artist", function(d){return d.isArtist})
+      .classed("album", function(d){return d.isAlbum})
+      .classed("song", function(d){return d.isSong})
 
     thisRow.on("click", (function(d){
         d3.event.stopPropagation();
@@ -34,8 +35,8 @@ function hello(url, thingToSelect) {
 function play(url){
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
-    console.log("Playing this... "+json);
-    d3.select("#nowPlaying").datum(json).text(function(d){return d.path});
+    console.log("Playing this... "+JSON.stringify(json));
+    d3.select("#nowPlaying").datum(json).text(function(d){return d.name});
     renderVolume(json);
   });
 }

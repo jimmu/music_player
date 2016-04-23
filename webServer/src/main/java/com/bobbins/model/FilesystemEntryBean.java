@@ -11,12 +11,12 @@ public class FilesystemEntryBean {
   public String artist;
   public String album;
   public String song;
-  // possibly delete the properties below
+
+  public boolean isArtist;
+  public boolean isAlbum;
+  public boolean isSong;
 
   public String name;
-  public Integer id;
-  public String path;
-  public Boolean isLeaf;
 
   public FilesystemEntryBean(){}
 
@@ -24,6 +24,10 @@ public class FilesystemEntryBean {
     this.artist = artist;
     this.album = album;
     this.song = song;
+
+    isSong = (song != null && !song.trim().isEmpty());
+    isAlbum = !isSong && (album != null && !album.trim().isEmpty());
+    isArtist = !isAlbum && (artist != null && !artist.trim().isEmpty());
   }
 
   public void setListActionUrl(String url){
@@ -38,13 +42,4 @@ public class FilesystemEntryBean {
     this.name = name;
   }
 
-//  // Possibly delete this
-//  public FilesystemEntryBean(String name, Integer id, String path, Boolean isLeaf, String listActionUrl, String playActionUrl){
-//    this.name = name;
-//    this.id = id;
-//    this.path = path;
-//    this.isLeaf = isLeaf;
-//    this.listActionUrl = listActionUrl;
-//    this.playActionUrl = playActionUrl;
-//  }
 }
