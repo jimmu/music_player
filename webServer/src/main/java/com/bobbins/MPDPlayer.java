@@ -3,14 +3,17 @@ package com.bobbins;
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
 import org.bff.javampd.MPD;
+import org.bff.javampd.MPDFile;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
+import org.bff.javampd.exception.MPDPlaylistException;
 import org.bff.javampd.objects.MPDArtist;
 import org.bff.javampd.objects.MPDAlbum;
 import org.bff.javampd.objects.MPDSong;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -55,6 +58,20 @@ public class MPDPlayer implements Player{
 
     public PlayingStatusBean play(String artist, String album, String song) throws PlayerException {
         System.out.println("Play "+artist+"/"+album+"/"+song);
+        try {
+            mpd.getPlaylist().clearPlaylist();
+            mpd.getPlaylist().addSongs(getSongs(artist, album, song));
+            mpd.getPlayer().play();
+        } catch (MPDPlaylistException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        } catch (MPDDatabaseException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
         return new PlayingStatusBean();
     }
 
@@ -69,5 +86,23 @@ public class MPDPlayer implements Player{
             throw new PlayerException(e);
         }
         return new PlayingStatusBean("foo", volume);
+    }
+
+    private List<MPDSong> getSongs(String artist, String album, String song) throws MPDDatabaseException {
+        List<MPDSong> songs = new ArrayList<>();
+        if (artist != null && album != null && !artist.trim().isEmpty() && !album.trim().isEmpty()) {
+            Collection<MPDSong> allSongs = mpd.getDatabase().findAlbumByArtist(new MPDArtist(artist), new MPDAlbum(album));
+            if (song == null || song.trim().isEmpty()) {
+                songs.addAll(allSongs);
+            }
+            else{
+                for (MPDSong thisSong : allSongs){
+                    if (song.equals(thisSong.getTitle())){
+                        songs.add(thisSong);
+                    }
+                }
+            }
+        }
+        return songs;
     }
 }
