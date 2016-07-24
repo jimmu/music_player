@@ -27,7 +27,7 @@ public class FilesystemEntryBean {
 
     isSong = (song != null && !song.trim().isEmpty());
     isAlbum = !isSong && (album != null && !album.trim().isEmpty());
-    isArtist = !isAlbum && (artist != null && !artist.trim().isEmpty());
+    isArtist = !isSong && !isAlbum && (artist != null && !artist.trim().isEmpty());
   }
 
   public void setListActionUrl(String url){
