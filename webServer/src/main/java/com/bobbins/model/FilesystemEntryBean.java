@@ -42,4 +42,7 @@ public class FilesystemEntryBean {
     this.name = name;
   }
 
+  public String toString(){
+    return "[artist: "+artist+", album: "+album+", song: "+song+", name: "+name+"]";
+  }
 }

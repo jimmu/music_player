@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by james on 29/03/2016.
@@ -24,28 +25,40 @@ public class PlainPlayer implements Player {
             if (rootPath == null) {
                 rootPath = new File(".").getCanonicalPath();
             }
-            String path = artist + File.separator + "album";
+            String path = rootPath;
+            if (artist != null){
+                path = path + File.separator + artist;
+                if (album != null){
+                    path = path + File.separator + album;
+                }
+            }
             File[] allFilesAndDirs = new File(path).listFiles();
             if (allFilesAndDirs != null) {
+                String pathSplitter = ("\\".equals(File.separator)? "\\\\" : File.separator);
                 for (File file : allFilesAndDirs) {
-                    String[] bits = file.getPath().split(File.separator);
-                    String thisArtist = null;
-                    String thisAlbum = null;
-                    String song = null;
-                    if (bits.length > 0) {
-                        thisArtist = bits[0];
-                        if (bits.length > 1) {
-                            thisAlbum = bits[1];
-                            if (bits.length > 2) {
-                                song = bits[2];
+                    try {
+                        String[] bits = file.getPath().split(pathSplitter);
+                        String thisArtist = null;
+                        String thisAlbum = null;
+                        String song = null;
+                        if (bits.length > 0) {
+                            thisArtist = bits[0];
+                            if (bits.length > 1) {
+                                thisAlbum = bits[1];
+                                if (bits.length > 2) {
+                                    song = bits[2];
+                                }
                             }
                         }
+                        FilesystemEntryBean entry = new FilesystemEntryBean(thisArtist, thisAlbum, song);
+                        entry.setName(file.getPath());
+                        entry.setListActionUrl("list/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
+                        entry.setPlayActionUrl("play/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
+                        files.add(entry);
                     }
-                    FilesystemEntryBean entry = new FilesystemEntryBean(thisArtist, thisAlbum, song);
-                    entry.setName(file.getPath());
-                    entry.setListActionUrl("list/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
-                    entry.setPlayActionUrl("play/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
-                    files.add(entry);
+                    catch (PatternSyntaxException e){
+                        System.out.println("Duff pattern in call to String.split "+e);
+                    }
                 }
             }
         }
