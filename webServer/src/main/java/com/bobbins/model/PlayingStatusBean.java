@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PlayingStatusBean {
 
-  public String path;
+  public String name;
   public Integer status;
   public String pauseActionUrl;
   public String volumeUpUrl;
@@ -15,8 +15,8 @@ public class PlayingStatusBean {
 
   public PlayingStatusBean(){}
 
-  public PlayingStatusBean(String path, Integer volume){
-    this.path = path;
+  public PlayingStatusBean(String name, Integer volume){
+    this.name = name;
     this.volume = volume;
     this.status = 200;
     this.pauseActionUrl = "pause";

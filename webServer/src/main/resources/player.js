@@ -36,7 +36,7 @@ function play(url){
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
     console.log("Playing this... "+JSON.stringify(json));
-    d3.select("#nowPlaying").datum(json).text(function(d){return d.name});
+    d3.select("#nowPlaying").datum(json).append("span").text(function(d){return d.name});
     renderVolume(json);
   });
 }
