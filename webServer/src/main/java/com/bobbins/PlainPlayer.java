@@ -84,8 +84,8 @@ public class PlainPlayer implements Player {
 
     @Override
     public PlayingStatusBean volume(int volume) throws PlayerException {
-        System.out.println("Set volume to "+volume);
-        this.volume = volume;
-        return new PlayingStatusBean(nowPlayingPath, volume);
+        this.volume = Math.min(100, Math.max(0,volume));
+        System.out.println("Set volume to "+this.volume);
+        return new PlayingStatusBean(nowPlayingPath, this.volume);
     }
 }

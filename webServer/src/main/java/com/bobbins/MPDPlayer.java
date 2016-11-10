@@ -80,12 +80,13 @@ public class MPDPlayer implements Player{
     }
 
     public PlayingStatusBean volume(int volume) throws PlayerException {
+        int limitedVolume = Math.min(100, Math.max(0,volume));
         try {
-            mpd.getPlayer().setVolume(volume);
+            mpd.getPlayer().setVolume(limitedVolume);
         } catch (MPDPlayerException e) {
             throw new PlayerException(e);
         }
-        return new PlayingStatusBean("foo", volume);
+        return new PlayingStatusBean("foo", limitedVolume);
     }
 
     private List<MPDSong> getSongs(String artist, String album, String song) throws MPDDatabaseException {
