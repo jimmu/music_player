@@ -25,4 +25,11 @@ public class Gui {
       return is;
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("d3")
+    public InputStream library(){
+      InputStream is = Gui.class.getResourceAsStream("/d3.v3.min.js");
+      return is;
+    }
 }
