@@ -50,6 +50,9 @@ public class PlainPlayer implements Player {
                                 }
                             }
                         }
+			if (thisArtist == null || "".equals(thisArtist)){
+			    thisArtist = "x";
+			}
                         FilesystemEntryBean entry = new FilesystemEntryBean(thisArtist, thisAlbum, song);
                         entry.setName(file.getPath());
                         entry.setListActionUrl("list/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));

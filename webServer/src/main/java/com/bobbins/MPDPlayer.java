@@ -76,10 +76,17 @@ public class MPDPlayer implements Player{
     }
 
     public PlayingStatusBean getStatus() throws PlayerException {
-	MPDSong currentSong = mpd.getPlayer().getCurrentSong();
-	String songName = getName(); // Album and Artist also available here.
-	int volume = mpd.getPlayer().getVolume;
-        return new PlayingStatusBean(songName, volume);
+	PlayingStatusBean status = null;
+	try {
+	    MPDSong currentSong = mpd.getPlayer().getCurrentSong();
+	    String songName = currentSong.getName(); // Album and Artist also available here.
+	    int volume = mpd.getPlayer().getVolume();
+	    status = new PlayingStatusBean(songName, volume);
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
+        return status;
     }
 
     public PlayingStatusBean volume(int volume) throws PlayerException {
