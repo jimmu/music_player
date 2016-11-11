@@ -36,7 +36,7 @@ function play(url){
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
     console.log("Playing this... "+JSON.stringify(json));
-    d3.select("#nowPlaying").datum(json).append("span").text(function(d){return d.name});
+    d3.select("#nowPlaying").datum(json).append("span").classed("playing", true).text(function(d){return d.name});
     renderVolume(json);
   });
 }
@@ -51,12 +51,12 @@ function volume(url){
 function renderVolume(json){
     var volumeSection = d3.select("#volume").datum(json);
     volumeSection.html(""); //TODO. This feels a bit non-d3. But works for me.
-    volumeSection.append("span").text(" - ")
+    volumeSection.append("span").classed("volumeUpDown", true).text(" - ")
         .on("click", (function(d){
             volume(d.volumeDownUrl);
         }));
-    volumeSection.append("span").text(function(d){return d.volume})
-    volumeSection.append("span").text(" + ")
+    volumeSection.append("span").classed("volume", true).text(function(d){return d.volume})
+    volumeSection.append("span").classed("volumeUpDown", true).text(" + ")
         .on("click", (function(d){
             volume(d.volumeUpUrl);
         }));
