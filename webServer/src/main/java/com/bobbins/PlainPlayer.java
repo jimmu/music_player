@@ -86,6 +86,6 @@ public class PlainPlayer implements Player {
     public PlayingStatusBean volume(int volume) throws PlayerException {
         this.volume = Math.min(100, Math.max(0,volume));
         System.out.println("Set volume to "+this.volume);
-        return new PlayingStatusBean(nowPlayingPath, this.volume);
+        return getStatus();
     }
 }
