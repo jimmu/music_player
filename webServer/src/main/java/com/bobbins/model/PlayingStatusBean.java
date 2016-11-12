@@ -12,14 +12,16 @@ public class PlayingStatusBean {
   public String volumeDownUrl;
   public String volumeUrl;
   public Integer volume;
+  public Boolean isPlaying;
 
   public PlayingStatusBean(){}
 
-  public PlayingStatusBean(String name, Integer volume){
+  public PlayingStatusBean(String name, Integer volume, Boolean isPlaying){
     this.name = name;
     this.volume = volume;
+    this.isPlaying = isPlaying;
     this.status = 200;
-    this.pauseActionUrl = "pause";
+    this.pauseActionUrl = "play/pause";
     this.volumeUpUrl="play/volume?volume="+(volume+1);
     this.volumeDownUrl="play/volume?volume="+(volume-1);
     this.volumeUrl="play/volume?volume=";

@@ -15,4 +15,5 @@ public interface Player {
     public PlayingStatusBean play(String artist, String album, String song) throws PlayerException;
     public PlayingStatusBean getStatus() throws PlayerException;
     public PlayingStatusBean volume(int volume) throws PlayerException;
+    public PlayingStatusBean pause() throws PlayerException;
 }

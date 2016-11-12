@@ -8,6 +8,7 @@ import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
 import org.bff.javampd.exception.MPDPlaylistException;
+import org.bff.javampd.monitor.PlayerStatus;
 import org.bff.javampd.objects.MPDArtist;
 import org.bff.javampd.objects.MPDAlbum;
 import org.bff.javampd.objects.MPDSong;
@@ -81,7 +82,9 @@ public class MPDPlayer implements Player{
 	    MPDSong currentSong = mpd.getPlayer().getCurrentSong();
 	    String songName = currentSong.getName(); // Album and Artist also available here.
 	    int volume = mpd.getPlayer().getVolume();
-	    status = new PlayingStatusBean(songName, volume);
+        org.bff.javampd.Player.Status playerStatus = mpd.getPlayer().getStatus();
+        Boolean isPlaying = PlayerStatus.STATUS_PLAYING.equals(playerStatus);
+        status = new PlayingStatusBean(songName, volume, isPlaying);
         } catch (MPDPlayerException e) {
             e.printStackTrace();
             throw new PlayerException(e);
@@ -94,6 +97,23 @@ public class MPDPlayer implements Player{
         try {
             mpd.getPlayer().setVolume(limitedVolume);
         } catch (MPDPlayerException e) {
+            throw new PlayerException(e);
+        }
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean pause() throws PlayerException {
+        try {
+            org.bff.javampd.Player.Status playerStatus = mpd.getPlayer().getStatus();
+            if (org.bff.javampd.Player.Status.STATUS_PAUSED.equals(playerStatus)){
+                mpd.getPlayer().play();
+            }
+            else if (org.bff.javampd.Player.Status.STATUS_PLAYING.equals(playerStatus)){
+                mpd.getPlayer().pause();
+            }
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
             throw new PlayerException(e);
         }
         return getStatus();

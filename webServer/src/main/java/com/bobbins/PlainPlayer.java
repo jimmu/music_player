@@ -17,6 +17,7 @@ public class PlainPlayer implements Player {
     private String rootPath = null;
     private String nowPlayingPath = null;
     private Integer volume = 20;
+    private boolean isPlaying = false;
 
     @Override
     public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
@@ -77,18 +78,25 @@ public class PlainPlayer implements Player {
         String playThis = artist+":"+album+":"+song;
         System.out.println("Play: "+playThis);
         nowPlayingPath = playThis;
+        isPlaying = true;
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean getStatus() throws PlayerException {
-        return new PlayingStatusBean(nowPlayingPath, volume);   //TODO. Use something nicer than the path.
+        return new PlayingStatusBean(nowPlayingPath, volume, isPlaying);   //TODO. Use something nicer than the path.
     }
 
     @Override
     public PlayingStatusBean volume(int volume) throws PlayerException {
         this.volume = Math.min(100, Math.max(0,volume));
         System.out.println("Set volume to "+this.volume);
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean pause() throws PlayerException {
+        isPlaying = !isPlaying;
         return getStatus();
     }
 }
