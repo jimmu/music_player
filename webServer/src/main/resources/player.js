@@ -37,6 +37,7 @@ function play(url){
     if (error) return console.warn(error);
     console.log("Playing this... "+JSON.stringify(json));
     d3.select("#nowPlaying").datum(json).append("span").classed("playing", true).text(function(d){return d.name});
+    renderControls(json);
     renderVolume(json);
   });
 }
@@ -45,6 +46,13 @@ function volume(url){
     d3.json(url, function(error, json){
         if (error) return console.warn(error);
         renderVolume(json);
+    });
+}
+
+function playerControl(url){
+    d3.json(url, function(error, json){
+        if (error) return console.warn(error);
+        renderControls(json);
     });
 }
 
@@ -60,4 +68,16 @@ function renderVolume(json){
         .on("click", (function(d){
             volume(d.volumeUpUrl);
         }));
+}
+
+function renderControls(json){
+    var controlsSection = d3.select("#controls").datum(json);
+    controlsSection.html(""); // As above.
+    controlsSection.append("span")
+                    .classed("pauseButton", function(d){return d.isPlaying})
+                    .text("Pause")
+                    .on("click", (function(d){
+                        playerControl(d.pauseActionUrl);
+                    }));
+
 }

@@ -63,4 +63,16 @@ public class Player {
         return null; //TODO. Return a 500 series error
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("pause")
+    public PlayingStatusBean pause() {
+        try {
+            return PlayerFactory.getPlayer().pause();
+        } catch (PlayerException e) {
+            e.printStackTrace();
+        }
+        return null; //TODO. Return a 500 series error
+    }
+
 }
