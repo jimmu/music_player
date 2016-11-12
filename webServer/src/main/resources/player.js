@@ -36,7 +36,7 @@ function play(url){
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
     console.log("Playing this... "+JSON.stringify(json));
-    d3.select("#nowPlaying").datum(json).append("span").classed("playing", true).text(function(d){return d.name});
+    d3.select("#nowPlaying").datum(json).html("").append("span").classed("playing", true).text(function(d){return d.name});
     renderControls(json);
     renderVolume(json);
   });
@@ -58,7 +58,7 @@ function playerControl(url){
 
 function renderVolume(json){
     var volumeSection = d3.select("#volume").datum(json);
-    volumeSection.html(""); //TODO. This feels a bit non-d3. But works for me.
+    volumeSection.html(""); //TODO. This feels a bit non-d3. But works for me. Prolly better to get the enter set and so forth.
     volumeSection.append("span").classed("volumeUpDown", true).text(" - ")
         .on("click", (function(d){
             volume(d.volumeDownUrl);
@@ -78,6 +78,12 @@ function renderControls(json){
                     .text("Pause")
                     .on("click", (function(d){
                         playerControl(d.pauseActionUrl);
+                    }));
+    controlsSection.append("span")
+                    .classed("stopButton", function(d){return d.isPlaying})
+                    .text("Stop")
+                    .on("click", (function(d){
+                        playerControl(d.stopActionUrl);
                     }));
 
 }

@@ -119,6 +119,17 @@ public class MPDPlayer implements Player{
         return getStatus();
     }
 
+    @Override
+    public PlayingStatusBean stop() throws PlayerException {
+        try {
+            mpd.getPlayer().stop();
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
+        return getStatus();
+    }
+
     private List<MPDSong> getSongs(String artist, String album, String song) throws MPDDatabaseException {
         List<MPDSong> songs = new ArrayList<>();
         if (artist != null && album != null && !artist.trim().isEmpty() && !album.trim().isEmpty()) {

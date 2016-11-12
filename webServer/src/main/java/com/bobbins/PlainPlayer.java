@@ -99,4 +99,10 @@ public class PlainPlayer implements Player {
         isPlaying = !isPlaying;
         return getStatus();
     }
+
+    @Override
+    public PlayingStatusBean stop() throws PlayerException {
+        isPlaying = false;
+        return getStatus();
+    }
 }

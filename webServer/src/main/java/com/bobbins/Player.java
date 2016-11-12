@@ -16,4 +16,5 @@ public interface Player {
     public PlayingStatusBean getStatus() throws PlayerException;
     public PlayingStatusBean volume(int volume) throws PlayerException;
     public PlayingStatusBean pause() throws PlayerException;
+    public PlayingStatusBean stop() throws PlayerException;
 }
