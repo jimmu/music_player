@@ -105,4 +105,26 @@ public class PlainPlayer implements Player {
         isPlaying = false;
         return getStatus();
     }
+
+    @Override
+    public void listenForChanges(final PlayerListener listener) throws PlayerException {
+        // Send changes every now and again.
+	new Thread(new Runnable(){
+            public void run(){
+		while(true){
+		    try{
+			Thread.sleep(3000);
+			try{
+			    listener.onChange(getStatus());
+			}
+			catch(PlayerException e){
+			    e.printStackTrace();
+			}
+		    }
+		    catch(InterruptedException e){
+		    }
+		}
+	    }
+	}).start();        
+    }
 }

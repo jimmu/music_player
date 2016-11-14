@@ -147,4 +147,8 @@ public class MPDPlayer implements Player{
         }
         return songs;
     }
+
+    public void listenForChanges(PlayerListener listener) throws PlayerException {
+	//Register ourselves with MPD for event changes and then pass those on.
+    }
 }

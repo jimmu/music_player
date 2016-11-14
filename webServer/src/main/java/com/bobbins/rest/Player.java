@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.bobbins.PlayerException;
 import com.bobbins.PlayerFactory;
+import com.bobbins.PlayerListener;
 import com.bobbins.model.PlayingStatusBean;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
@@ -97,33 +98,33 @@ public class Player {
     @Path("events")
     public EventOutput getServerSentEvents(){
 	final EventOutput eventOutput = new EventOutput();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        final PlayerListener listener = new PlayerListener(){
+	    public void onChange(PlayingStatusBean state){
                 try {
-                    for (int i = 0; i < 10; i++) {
-                        try { Thread.sleep(5000); } catch(InterruptedException e){}
-                        final OutboundEvent.Builder eventBuilder
-                        = new OutboundEvent.Builder();
-                        eventBuilder.name("player-state-change");
-                        eventBuilder.data(String.class,
-                            "Hello world " + i + "!");
-                        final OutboundEvent event = eventBuilder.build();
-                        eventOutput.write(event);
-                    }
+			final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+			eventBuilder.name("player-state-change");
+			eventBuilder.data(String.class, "Hello from the music player");
+			final OutboundEvent event = eventBuilder.build();
+			eventOutput.write(event);
                 } catch (IOException e) {
                     throw new RuntimeException(
                         "Error when writing the event.", e);
-                } finally {
-                    try {
-                        eventOutput.close();
-                    } catch (IOException ioClose) {
-                        throw new RuntimeException(
-                            "Error when closing the event output.", ioClose);
-                    }
-                }
-            }
-        }).start();
+                } //finally {
+                    //try {
+                        //eventOutput.close();
+                    //} catch (IOException ioClose) {
+                        //throw new RuntimeException(
+                            //"Error when closing the event output.", ioClose);
+                    //}
+                //}
+	    }
+        };
+        try {
+	    PlayerFactory.getPlayer().listenForChanges(listener);
+	}
+        catch(PlayerException e){
+            e.printStackTrace();
+        }
         return eventOutput;
     }
 }
