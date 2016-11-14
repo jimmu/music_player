@@ -105,7 +105,7 @@ public class Player {
                         try { Thread.sleep(5000); } catch(InterruptedException e){}
                         final OutboundEvent.Builder eventBuilder
                         = new OutboundEvent.Builder();
-                        eventBuilder.name("message-to-client");
+                        eventBuilder.name("player-state-change");
                         eventBuilder.data(String.class,
                             "Hello world " + i + "!");
                         final OutboundEvent event = eventBuilder.build();

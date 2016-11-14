@@ -30,6 +30,13 @@ function hello(url, thingToSelect) {
            }
          }));
   });
+
+  //Now set up push event listener.
+  console.log("About to set up event source");
+  var source = new EventSource("play/events");
+  source.addEventListener('player-state-change', function(event){
+    console.log(event.data);
+  });
 }
 
 function play(url){
