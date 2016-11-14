@@ -87,7 +87,8 @@ public class MPDPlayer implements Player {
         org.bff.javampd.Player.Status playerStatus = mpd.getPlayer().getStatus();
         Boolean isPlaying = PlayerStatus.STATUS_PLAYING.equals(playerStatus);
  	Integer songLength = currentSong.getLength();
-        status = new PlayingStatusBean(songName, volume, isPlaying, songLength);
+        Long elapsedSeconds = mpd.getPlayer().getElapsedTime();
+        status = new PlayingStatusBean(songName, volume, isPlaying, songLength, elapsedSeconds);
         } catch (MPDPlayerException e) {
             e.printStackTrace();
             throw new PlayerException(e);

@@ -101,6 +101,11 @@ function renderControls(json){
                         playerControl(d.stopActionUrl);
                     }));
     controlsSection.append("span")
+		    .classed("elapsedTime", true)
+		    .text(function(d){return d.elapsedTime});
+    controlsSection.append("span")
+		    .text("/");
+    controlsSection.append("span")
 		    .classed("trackLength", true)
 		    .text(function(d){return d.songLength});
 

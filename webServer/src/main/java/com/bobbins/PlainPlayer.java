@@ -18,6 +18,7 @@ public class PlainPlayer implements Player {
     private String nowPlayingPath = null;
     private Integer volume = 20;
     private boolean isPlaying = false;
+    private long songStartTime = System.currentTimeMillis();
 
     @Override
     public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
@@ -79,13 +80,15 @@ public class PlainPlayer implements Player {
         System.out.println("Play: "+playThis);
         nowPlayingPath = playThis;
         isPlaying = true;
+        songStartTime = System.currentTimeMillis();
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean getStatus() throws PlayerException {
 	Integer songLength = 182;
-        return new PlayingStatusBean(nowPlayingPath, volume, isPlaying, songLength);   //TODO. Use something nicer than the path.
+	Long elapsedSeconds = (System.currentTimeMillis()-songStartTime)/1000; //A hack.
+        return new PlayingStatusBean(nowPlayingPath, volume, isPlaying, songLength, elapsedSeconds);   //TODO. Use something nicer than the path.
     }
 
     @Override

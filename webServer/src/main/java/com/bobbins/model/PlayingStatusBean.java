@@ -15,14 +15,16 @@ public class PlayingStatusBean {
   public Integer volume;
   public Boolean isPlaying;
   public Integer songLength;
+  public Long elapsedTime;
 
   public PlayingStatusBean(){}
 
-  public PlayingStatusBean(String name, Integer volume, Boolean isPlaying, Integer songLength){
+  public PlayingStatusBean(String name, Integer volume, Boolean isPlaying, Integer songLength, Long elapsedTime){
     this.name = name;
     this.volume = volume;
     this.isPlaying = isPlaying;
     this.songLength = songLength;
+    this.elapsedTime = elapsedTime;
     this.status = 200;
     this.stopActionUrl = "play/stop";
     this.pauseActionUrl = "play/pause";
