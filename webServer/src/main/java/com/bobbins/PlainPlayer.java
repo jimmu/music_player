@@ -84,7 +84,8 @@ public class PlainPlayer implements Player {
 
     @Override
     public PlayingStatusBean getStatus() throws PlayerException {
-        return new PlayingStatusBean(nowPlayingPath, volume, isPlaying);   //TODO. Use something nicer than the path.
+	Integer songLength = 182;
+        return new PlayingStatusBean(nowPlayingPath, volume, isPlaying, songLength);   //TODO. Use something nicer than the path.
     }
 
     @Override

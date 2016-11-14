@@ -100,5 +100,8 @@ function renderControls(json){
                     .on("click", (function(d){
                         playerControl(d.stopActionUrl);
                     }));
+    controlsSection.append("span")
+		    .classed("trackLength", true)
+		    .text(function(d){return d.songLength});
 
 }
