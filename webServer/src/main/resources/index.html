@@ -7,6 +7,10 @@
             border: 1px;
             padding-left: 12px;
           }
+	  .infoPanel {
+	  }
+          .musicLibraryPanel{
+	  }
           .artist {
             background-color: #dd6644;
           }
@@ -40,9 +44,13 @@
       </style>
   </head>
   <body>
-    <div id="nowPlaying"></div>
-    <div id="controls"></div>
-    <div id="volume"></div>
-    <div id="tracks"></div>
+    <div class="infoPanel">
+      <div id="nowPlaying"></div>
+      <div id="controls"></div>
+      <div id="volume"></div>
+    </div>
+    <div class="musicLibraryPanel">
+      <div id="tracks"></div>
+    </div>
     <script>hello("list", "#tracks");</script>
   </body>
