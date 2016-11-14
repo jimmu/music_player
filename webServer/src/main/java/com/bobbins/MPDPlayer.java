@@ -4,6 +4,8 @@ import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
 import org.bff.javampd.MPD;
 import org.bff.javampd.MPDFile;
+import org.bff.javampd.events.PlayerChangeListener;
+import org.bff.javampd.events.PlayerChangeEvent;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * Created by james on 26/03/2016.
  */
-public class MPDPlayer implements Player{
+public class MPDPlayer implements Player {
 
     private MPD mpd;
 
@@ -148,7 +150,20 @@ public class MPDPlayer implements Player{
         return songs;
     }
 
-    public void listenForChanges(PlayerListener listener) throws PlayerException {
+    public void listenForChanges(final PlayerListener listener) throws PlayerException {
+	mpd.getPlayer().addPlayerChangeListener(new PlayerChangeListener(){
+ 	    // Do these fire automatically? Or only when manually fired by the javampd API?
+	    public void playerChanged(PlayerChangeEvent event){
+		System.out.println("MPD Player change event fired. "+event);
+		//Do we care about the content of the event?
+		try{
+		    listener.onChange(getStatus());
+		}
+		catch (PlayerException e){
+		    System.out.println("Problem during player change listener. "+e);
+		}
+	    }
+	});
 	//Register ourselves with MPD for event changes and then pass those on.
     }
 }
