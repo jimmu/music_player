@@ -37,15 +37,16 @@ function hello(url, thingToSelect) {
   source.addEventListener('player-state-change', function(event){
     var json = JSON.parse(event.data);
     console.log(JSON.stringify(json));
-    //TODO. Now re-render parts of the GUI using this info.
+    renderCurrentTrack(json);
+    renderControls(json);
+    renderVolume(json);
   });
 }
 
 function play(url){
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
-    console.log("Playing this... "+JSON.stringify(json));
-    d3.select("#nowPlaying").datum(json).html("").append("span").classed("playing", true).text(function(d){return d.name});
+    renderCurrentTrack(json);
     renderControls(json);
     renderVolume(json);
   });
@@ -63,6 +64,11 @@ function playerControl(url){
         if (error) return console.warn(error);
         renderControls(json);
     });
+}
+
+function renderCurrentTrack(json){
+    //console.log("Playing this... "+JSON.stringify(json));
+    d3.select("#nowPlaying").datum(json).html("").append("span").classed("playing", true).text(function(d){return d.name});
 }
 
 function renderVolume(json){
