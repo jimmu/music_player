@@ -103,7 +103,8 @@ public class Player {
                 try {
 			final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
 			eventBuilder.name("player-state-change");
-			eventBuilder.data(String.class, "Hello from the music player");
+			eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
+			eventBuilder.data(PlayingStatusBean.class, state);
 			final OutboundEvent event = eventBuilder.build();
 			eventOutput.write(event);
                 } catch (IOException e) {

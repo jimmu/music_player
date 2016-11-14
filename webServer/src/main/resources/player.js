@@ -35,7 +35,9 @@ function hello(url, thingToSelect) {
   console.log("About to set up event source");
   var source = new EventSource("play/events");
   source.addEventListener('player-state-change', function(event){
-    console.log(event.data);
+    var json = JSON.parse(event.data);
+    console.log(JSON.stringify(json));
+    //TODO. Now re-render parts of the GUI using this info.
   });
 }
 
