@@ -40,6 +40,13 @@ function hello(url, thingToSelect) {
 }
 
 function setup(url, thingToSelect){
+    // There may already be music playing. If so, find out and show it.
+    d3.json("play/status", function(error, json){
+        if (error) return console.warn(error);
+        renderCurrentTrack(json);
+        renderControls(json);
+        renderVolume(json);
+    });
     hello(url, thingToSelect);
     //Now set up push event listener.
     console.log("About to set up event source");
