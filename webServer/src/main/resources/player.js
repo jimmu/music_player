@@ -63,6 +63,7 @@ function playerControl(url){
     d3.json(url, function(error, json){
         if (error) return console.warn(error);
         renderControls(json);
+        renderCurrentTrack(json);
     });
 }
 
