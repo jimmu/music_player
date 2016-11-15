@@ -30,17 +30,20 @@ function hello(url, thingToSelect) {
            }
          }));
   });
+}
 
-  //Now set up push event listener.
-  console.log("About to set up event source");
-  var source = new EventSource("play/events");
-  source.addEventListener('player-state-change', function(event){
-    var json = JSON.parse(event.data);
-    console.log(JSON.stringify(json));
-    renderCurrentTrack(json);
-    renderControls(json);
-    renderVolume(json);
-  });
+function setup(url, thingToSelect){
+    hello(url, thingToSelect);
+    //Now set up push event listener.
+    console.log("About to set up event source");
+    var source = new EventSource("play/events");
+    source.addEventListener('player-state-change', function(event){
+        var json = JSON.parse(event.data);
+        console.log(JSON.stringify(json));
+        renderCurrentTrack(json);
+        renderControls(json);
+        renderVolume(json);
+    });
 }
 
 function play(url){

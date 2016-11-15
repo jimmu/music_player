@@ -7,6 +7,7 @@ import org.bff.javampd.exception.MPDPlayerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
@@ -25,7 +26,12 @@ public class PlainPlayer implements Player {
         List<FilesystemEntryBean> files = new ArrayList<FilesystemEntryBean>();
         try {
             if (rootPath == null) {
-                rootPath = new File(".").getCanonicalPath();
+                if (System.getProperty("os.name").toLowerCase().contains("windows")){
+                    rootPath = System.getProperty("user.home");
+                }
+                else {
+                    rootPath = new File(".").getCanonicalPath();
+                }
             }
             String path = rootPath;
             if (artist != null){
@@ -39,7 +45,8 @@ public class PlainPlayer implements Player {
                 String pathSplitter = ("\\".equals(File.separator)? "\\\\" : File.separator);
                 for (File file : allFilesAndDirs) {
                     try {
-                        String[] bits = file.getPath().split(pathSplitter);
+                        String fullName = file.getPath().substring(rootPath.length()+File.separator.length());
+                        String[] bits = fullName.split(pathSplitter);
                         String thisArtist = null;
                         String thisAlbum = null;
                         String song = null;

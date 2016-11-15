@@ -98,6 +98,7 @@ public class Player {
     @Path("events")
     public EventOutput getServerSentEvents(){
 	final EventOutput eventOutput = new EventOutput();
+        System.out.println("**** Creating a new event sender");
         final PlayerListener listener = new PlayerListener(){
 	    public void onChange(PlayingStatusBean state){
                 try {
