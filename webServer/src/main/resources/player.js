@@ -14,7 +14,14 @@ function hello(url, thingToSelect) {
     thisRow.on("click", (function(d){
         d3.event.stopPropagation();
         if (d.listActionUrl){
-          hello(d.listActionUrl, this);
+          if (! this.getAttribute("expanded")){
+            this.setAttribute("expanded", true);
+            hello(d.listActionUrl, this);
+          }
+          else{
+            d3.select(this).selectAll("div").remove();
+            this.removeAttribute("expanded");
+          }
         }
       }));
 
