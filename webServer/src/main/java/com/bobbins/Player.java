@@ -18,4 +18,7 @@ public interface Player {
     public PlayingStatusBean pause() throws PlayerException;
     public PlayingStatusBean stop() throws PlayerException;
     public void listenForChanges(PlayerListener listener) throws PlayerException;
+    public PlayingStatusBean next() throws PlayerException;
+    public PlayingStatusBean previous() throws PlayerException;
+    public PlayingStatusBean play() throws PlayerException;
 }

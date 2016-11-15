@@ -134,6 +134,39 @@ public class MPDPlayer implements Player {
         return getStatus();
     }
 
+    @Override
+    public PlayingStatusBean next() throws PlayerException {
+        try {
+            mpd.getPlayer().playNext();
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean previous() throws PlayerException {
+        try {
+            mpd.getPlayer().playPrev();
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean play() throws PlayerException {
+        try {
+            mpd.getPlayer().play();
+        } catch (MPDPlayerException e) {
+            e.printStackTrace();
+            throw new PlayerException(e);
+        }
+        return getStatus();
+    }
+
     private List<MPDSong> getSongs(String artist, String album, String song) throws MPDDatabaseException {
         List<MPDSong> songs = new ArrayList<>();
         if (artist != null && album != null && !artist.trim().isEmpty() && !album.trim().isEmpty()) {

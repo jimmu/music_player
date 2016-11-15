@@ -128,4 +128,39 @@ public class Player {
         }
         return eventOutput;
     }
+
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("next")
+    public PlayingStatusBean next() {
+        try {
+            return PlayerFactory.getPlayer().next();
+        } catch (PlayerException e) {
+            e.printStackTrace();
+        }
+        return null; //TODO. Return a 500 series error
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("previous")
+    public PlayingStatusBean previous() {
+        try {
+            return PlayerFactory.getPlayer().previous();
+        } catch (PlayerException e) {
+            e.printStackTrace();
+        }
+        return null; //TODO. Return a 500 series error
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("play")
+    public PlayingStatusBean play() {
+        try {
+            return PlayerFactory.getPlayer().play();
+        } catch (PlayerException e) {
+            e.printStackTrace();
+        }
+        return null; //TODO. Return a 500 series error
+    }
 }

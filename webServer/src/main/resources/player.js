@@ -89,6 +89,18 @@ function renderControls(json){
     var controlsSection = d3.select("#controls").datum(json);
     controlsSection.html(""); // As above.
     controlsSection.append("span")
+                    .classed("previousButton", true)
+                    .text("Previous")
+                    .on("click", (function(d){
+                        playerControl(d.previousTrackActionUrl);
+                    }));
+    controlsSection.append("span")
+                    .classed("playButton", function(d){return !d.isPlaying})
+                    .text("Play")
+                    .on("click", (function(d){
+                        playerControl(d.playActionUrl);
+                    }));
+    controlsSection.append("span")
                     .classed("pauseButton", function(d){return d.isPlaying})
                     .text("Pause")
                     .on("click", (function(d){
@@ -101,6 +113,12 @@ function renderControls(json){
                         playerControl(d.stopActionUrl);
                     }));
     controlsSection.append("span")
+                    .classed("nextButton", true)
+                    .text("Next")
+                    .on("click", (function(d){
+                        playerControl(d.nextTrackActionUrl);
+                    }));
+    controlsSection.append("span")
 		    .classed("elapsedTime", true)
 		    .text(function(d){return d.elapsedTime});
     controlsSection.append("span")
@@ -108,5 +126,4 @@ function renderControls(json){
     controlsSection.append("span")
 		    .classed("trackLength", true)
 		    .text(function(d){return d.songLength});
-
 }

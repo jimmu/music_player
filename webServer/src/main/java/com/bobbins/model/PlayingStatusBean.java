@@ -8,7 +8,10 @@ public class PlayingStatusBean {
   public String name;
   public Integer status;
   public String stopActionUrl;
+  public String nextTrackActionUrl;
+  public String previousTrackActionUrl;
   public String pauseActionUrl;
+  public String playActionUrl;
   public String volumeUpUrl;
   public String volumeDownUrl;
   public String volumeUrl;
@@ -26,8 +29,12 @@ public class PlayingStatusBean {
     this.songLength = songLength;
     this.elapsedTime = elapsedTime;
     this.status = 200;
+    this.playActionUrl = "play/play";
     this.stopActionUrl = "play/stop";
     this.pauseActionUrl = "play/pause";
+    this.nextTrackActionUrl = "play/next";
+    this.previousTrackActionUrl = "play/previous";
+
     this.volumeUpUrl="play/volume?volume="+(volume+1);
     this.volumeDownUrl="play/volume?volume="+(volume-1);
     this.volumeUrl="play/volume?volume=";

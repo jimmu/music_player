@@ -113,23 +113,36 @@ public class PlainPlayer implements Player {
     @Override
     public void listenForChanges(final PlayerListener listener) throws PlayerException {
         // Send made-up changes every now and again.
-	new Thread(new Runnable(){
-            public void run(){
-		while(true){
-		    try{
-			Thread.sleep(3000);
-			try{
-			    volume++;
-			    listener.onChange(getStatus());
-			}
-			catch(PlayerException e){
-			    e.printStackTrace();
-			}
-		    }
-		    catch(InterruptedException e){
-		    }
-		}
-	    }
-	}).start();        
+        new Thread(new Runnable() {
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(3000);
+                        try {
+                            volume++;
+                            listener.onChange(getStatus());
+                        } catch (PlayerException e) {
+                            e.printStackTrace();
+                        }
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+        }).start();
+    }
+
+    public PlayingStatusBean next() throws PlayerException {
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean previous() throws PlayerException {
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean play() throws PlayerException {
+        isPlaying = true;
+        return getStatus();
     }
 }
