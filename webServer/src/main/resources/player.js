@@ -138,12 +138,8 @@ function renderTrackTime(json){
     timeSection.append("span")
 		    .classed("elapsedTime", true)
 		    .text(function(d){return formatTime(d.elapsedTime)});
-    timeSection.append("span")
-		    .text("/");
-    timeSection.append("span")
-		    .classed("trackLength", true)
-		    .text(function(d){return formatTime(d.songLength)});
 
+    //Doing this with svg - overkill? DIVs would probably do fine.
     var barHeight = 16;
     var barWidth = 100;
     var svg = timeSection.append("svg").attr("width", barWidth).attr("height", barHeight);
@@ -156,6 +152,10 @@ function renderTrackTime(json){
 	.attr("width", function(d){return barWidth*(d.songLength-d.elapsedTime)/d.songLength})
 	.attr("height", barHeight)
 	.attr("fill", "gray");
+
+    timeSection.append("span")
+		    .classed("trackLength", true)
+		    .text(function(d){return formatTime(d.songLength)});
 }
 
 function formatTime(seconds){
