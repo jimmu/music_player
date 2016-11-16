@@ -32,12 +32,9 @@ function showList(url, containerNode) {
     thisRow.append("span").text(function(d){
 	return d.playActionUrl? " - play" : "";
 	})
-      .on("click", (function(d){
-           d3.event.stopPropagation();
-           if (d.playActionUrl){
-             play(d.playActionUrl);
-           }
-         }));
+      .on("click", function(d){
+	   playerControl(d.playActionUrl);
+         });
   });
 }
 
@@ -47,6 +44,7 @@ function setup(url, containerNode){
         if (error) return console.warn(error);
         renderCurrentTrack(json);
         renderControls(json);
+	renderTrackTime(json);
         renderVolume(json);
     });
     showList(url, containerNode);
@@ -58,17 +56,9 @@ function setup(url, containerNode){
         console.log(JSON.stringify(json));
         renderCurrentTrack(json);
         renderControls(json);
+	renderTrackTime(json);
         renderVolume(json);
     });
-}
-
-function play(url){
-  d3.json(url, function(error, json){
-    if (error) return console.warn(error);
-    renderCurrentTrack(json);
-    renderControls(json);
-    renderVolume(json);
-  });
 }
 
 function volume(url){
@@ -82,7 +72,9 @@ function playerControl(url){
     d3.json(url, function(error, json){
         if (error) return console.warn(error);
         renderControls(json);
+	renderTrackTime(json);
         renderCurrentTrack(json);
+	renderVolume(json);
     });
 }
 
@@ -138,12 +130,38 @@ function renderControls(json){
                     .on("click", (function(d){
                         playerControl(d.nextTrackActionUrl);
                     }));
-    controlsSection.append("span")
+}
+
+function renderTrackTime(json){
+    var timeSection = d3.select("#trackTime").datum(json);
+    timeSection.html(""); 
+    timeSection.append("span")
 		    .classed("elapsedTime", true)
-		    .text(function(d){return d.elapsedTime});
-    controlsSection.append("span")
+		    .text(function(d){return formatTime(d.elapsedTime)});
+    timeSection.append("span")
 		    .text("/");
-    controlsSection.append("span")
+    timeSection.append("span")
 		    .classed("trackLength", true)
-		    .text(function(d){return d.songLength});
+		    .text(function(d){return formatTime(d.songLength)});
+
+    var barHeight = 16;
+    var barWidth = 100;
+    var svg = timeSection.append("svg").attr("width", barWidth).attr("height", barHeight);
+    svg.append("rect").attr("x", 0).attr("y",0)
+	.attr("width", function(d){return barWidth*d.elapsedTime/d.songLength})
+	.attr("height", barHeight)
+	.attr("fill", "teal");  //TODO: Can the colour be applied via css class instead?
+    svg.append("rect").attr("x", function(d){return barWidth*d.elapsedTime/d.songLength})
+	.attr("y",0)
+	.attr("width", function(d){return barWidth*(d.songLength-d.elapsedTime)/d.songLength})
+	.attr("height", barHeight)
+	.attr("fill", "gray");
+}
+
+function formatTime(seconds){
+  var someDate = new Date(2016, 1, 1);
+  var unixEpochStyle = +someDate;
+  var withOurSeconds = unixEpochStyle+(seconds*1000);
+  var formatter = d3.time.format("%M:%S");
+  return formatter(new Date(withOurSeconds));
 }
