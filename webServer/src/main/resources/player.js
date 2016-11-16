@@ -1,9 +1,9 @@
-function hello(url, thingToSelect) {
+function showList(url, containerNode) {
   d3.json(url, function(error, json){
     if (error) return console.warn(error);
 
     var thisRow =
-    d3.select(thingToSelect)
+    d3.select(containerNode)
     .selectAll("div").data(json)
       .enter()
       .append("div")
@@ -16,7 +16,7 @@ function hello(url, thingToSelect) {
         if (d.listActionUrl){
           if (! this.getAttribute("expanded")){
             this.setAttribute("expanded", true);
-            hello(d.listActionUrl, this);
+            showList(d.listActionUrl, this);
           }
           else{
             d3.select(this).selectAll("div").remove();
@@ -29,7 +29,9 @@ function hello(url, thingToSelect) {
         return d.name;
       });
 
-    thisRow.append("span").text(" - play")
+    thisRow.append("span").text(function(d){
+	return d.playActionUrl? " - play" : "";
+	})
       .on("click", (function(d){
            d3.event.stopPropagation();
            if (d.playActionUrl){
@@ -39,7 +41,7 @@ function hello(url, thingToSelect) {
   });
 }
 
-function setup(url, thingToSelect){
+function setup(url, containerNode){
     // There may already be music playing. If so, find out and show it.
     d3.json("play/status", function(error, json){
         if (error) return console.warn(error);
@@ -47,7 +49,7 @@ function setup(url, thingToSelect){
         renderControls(json);
         renderVolume(json);
     });
-    hello(url, thingToSelect);
+    showList(url, containerNode);
     //Now set up push event listener.
     console.log("About to set up event source");
     var source = new EventSource("play/events");
@@ -91,7 +93,7 @@ function renderCurrentTrack(json){
 
 function renderVolume(json){
     var volumeSection = d3.select("#volume").datum(json);
-    volumeSection.html(""); //TODO. This feels a bit non-d3. But works for me. Prolly better to get the enter set and so forth.
+    volumeSection.html(""); 
     volumeSection.append("span").classed("volumeUpDown", true).text(" - ")
         .on("click", (function(d){
             volume(d.volumeDownUrl);
@@ -105,7 +107,7 @@ function renderVolume(json){
 
 function renderControls(json){
     var controlsSection = d3.select("#controls").datum(json);
-    controlsSection.html(""); // As above.
+    controlsSection.html(""); 
     controlsSection.append("span")
                     .classed("previousButton", true)
                     .text("Previous")

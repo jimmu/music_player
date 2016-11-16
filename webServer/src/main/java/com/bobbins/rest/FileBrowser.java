@@ -44,11 +44,12 @@ public class FileBrowser {
             for (FilesystemEntryBean entry : musicEntries){
                 //Enrich this entry with urls.
                 if (entry.artist != null ){
-                   entry.setPlayActionUrl("play/"+entry.artist);
+                   //entry.setPlayActionUrl("play/"+entry.artist);
+                   entry.setPlayActionUrl(null);
                    entry.setListActionUrl("list/"+entry.artist);
                     entry.setName(entry.artist);
                    if (entry.album != null){
-                       entry.setPlayActionUrl(entry.playActionUrl+"/"+entry.album);
+                       entry.setPlayActionUrl("play/"+entry.artist+"/"+entry.album);
                        entry.setListActionUrl(entry.listActionUrl+"/"+entry.album);
                        entry.setName(entry.album);
                        if (entry.song != null){
