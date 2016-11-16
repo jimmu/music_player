@@ -5,8 +5,10 @@ import com.bobbins.model.PlayingStatusBean;
 import org.bff.javampd.MPD;
 import org.bff.javampd.events.PlayerChangeListener;
 import org.bff.javampd.events.PlayerBasicChangeListener;
+import org.bff.javampd.events.PlaylistBasicChangeListener;
 import org.bff.javampd.events.PlayerChangeEvent;
 import org.bff.javampd.events.PlayerBasicChangeEvent;
+import org.bff.javampd.events.PlaylistBasicChangeEvent;
 import org.bff.javampd.exception.MPDConnectionException;
 import org.bff.javampd.exception.MPDDatabaseException;
 import org.bff.javampd.exception.MPDPlayerException;
@@ -185,6 +187,19 @@ public class MPDPlayer implements Player {
 	//Register ourselves with MPD for event changes and then pass those on.
 	mpd.getMonitor().addPlayerChangeListener(new PlayerBasicChangeListener(){
 	    public void playerBasicChange(PlayerBasicChangeEvent event){
+		System.out.println("MPD Player change event fired. "+event);
+		//Do we care about the content of the event?
+		try{
+		    listener.onChange(getStatus());
+		}
+		catch (PlayerException e){
+		    System.out.println("Problem during player change listener. "+e);
+		}
+	    }
+	});
+
+	mpd.getMonitor().addPlaylistChangeListener(new PlaylistBasicChangeListener(){
+	    public void playlistBasicChange(PlaylistBasicChangeEvent event){
 		System.out.println("MPD Player change event fired. "+event);
 		//Do we care about the content of the event?
 		try{
