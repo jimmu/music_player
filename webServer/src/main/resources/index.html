@@ -1,7 +1,7 @@
   <head>
     <title>Music player</title>
-    <script src="gui/d3" charset="utf-8"></script>
-    <script type="text/javascript" src="gui/js"></script>
+    <script type="text/javascript" src="gui/require"></script>
+    <script type="text/javascript" src="gui/main"></script>
       <style>
           div {
             border: 1px;
@@ -68,5 +68,5 @@
     <div class="musicLibraryPanel">
       <div id="tracks"></div>
     </div>
-    <script>setup("list", "#tracks");</script>
+    <script>main();</script>
   </body>
