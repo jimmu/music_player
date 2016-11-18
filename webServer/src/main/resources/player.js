@@ -2,9 +2,10 @@ define(["d3.v3.min"
         ,"catalogue"
 	,"trackTime"
         ,"track"
+        ,"volume"
        ]
 ,
-function(d3, catalogue, trackTime, currentTrack) {
+function(d3, catalogue, trackTime, currentTrack, volume) {
   return function(url, containerNode){
       function setup(){
 	  // There may already be music playing. If so, find out and show it.
@@ -13,7 +14,7 @@ function(d3, catalogue, trackTime, currentTrack) {
 	      currentTrack(json);
 	      renderControls(json);
 	      trackTime(json);
-	      renderVolume(json);
+	      volume(json);
 	  });
           catalogue.onPlay(playerControl)(url, containerNode);
 	  //Now set up push event listener.
@@ -21,19 +22,13 @@ function(d3, catalogue, trackTime, currentTrack) {
 	  var source = new EventSource("play/events");
 	  source.addEventListener('player-state-change', function(event){
 	      var json = JSON.parse(event.data);
-	      console.log(JSON.stringify(json));
+	      //console.log(JSON.stringify(json));
 	      currentTrack(json);
 	      renderControls(json);
 	      trackTime(json);
-	      renderVolume(json);
+	      volume(json);
 	  });
 
-      function volume(url){
-	  d3.json(url, function(error, json){
-	      if (error) return console.warn(error);
-	      renderVolume(json);
-	  });
-      }
 
       function playerControl(url){
 	  d3.json(url, function(error, json){
@@ -41,22 +36,8 @@ function(d3, catalogue, trackTime, currentTrack) {
 	      renderControls(json);
 	      trackTime(json);
 	      currentTrack(json);
-	      renderVolume(json);
+	      volume(json);
 	  });
-      }
-
-      function renderVolume(json){
-	  var volumeSection = d3.select("#volume").datum(json);
-	  volumeSection.html(""); 
-	  volumeSection.append("span").classed("volumeUpDown", true).text(" - ")
-	      .on("click", (function(d){
-		  volume(d.volumeDownUrl);
-	      }));
-	  volumeSection.append("span").classed("volume", true).text(function(d){return d.volume})
-	  volumeSection.append("span").classed("volumeUpDown", true).text(" + ")
-	      .on("click", (function(d){
-		  volume(d.volumeUpUrl);
-	      }));
       }
 
       function renderControls(json){
