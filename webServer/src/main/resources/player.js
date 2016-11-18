@@ -1,14 +1,15 @@
 define(["d3.v3.min"
 	,"trackTime"
+        ,"track"
        ]
 ,
-function(d3, trackTime) {
+function(d3, trackTime, currentTrack) {
   return function(url, containerNode){
       function setup(){
 	  // There may already be music playing. If so, find out and show it.
 	  d3.json("play/status", function(error, json){
 	      if (error) return console.warn(error);
-	      renderCurrentTrack(json);
+	      currentTrack(json);
 	      renderControls(json);
 	      trackTime(json);
 	      renderVolume(json);
@@ -20,7 +21,7 @@ function(d3, trackTime) {
 	  source.addEventListener('player-state-change', function(event){
 	      var json = JSON.parse(event.data);
 	      console.log(JSON.stringify(json));
-	      renderCurrentTrack(json);
+	      currentTrack(json);
 	      renderControls(json);
 	      trackTime(json);
 	      renderVolume(json);
@@ -79,14 +80,9 @@ function(d3, trackTime) {
 	      if (error) return console.warn(error);
 	      renderControls(json);
 	      trackTime(json);
-	      renderCurrentTrack(json);
+	      currentTrack(json);
 	      renderVolume(json);
 	  });
-      }
-
-      function renderCurrentTrack(json){
-	  //console.log("Playing this... "+JSON.stringify(json));
-	  d3.select("#nowPlaying").datum(json).html("").append("span").classed("playing", true).text(function(d){return d.name});
       }
 
       function renderVolume(json){
