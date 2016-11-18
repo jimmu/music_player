@@ -1,9 +1,10 @@
 define(["d3.v3.min"
+        ,"catalogue"
 	,"trackTime"
         ,"track"
        ]
 ,
-function(d3, trackTime, currentTrack) {
+function(d3, catalogue, trackTime, currentTrack) {
   return function(url, containerNode){
       function setup(){
 	  // There may already be music playing. If so, find out and show it.
@@ -14,7 +15,7 @@ function(d3, trackTime, currentTrack) {
 	      trackTime(json);
 	      renderVolume(json);
 	  });
-	  showList(url, containerNode);
+          catalogue.onPlay(playerControl)(url, containerNode);
 	  //Now set up push event listener.
 	  console.log("About to set up event source");
 	  var source = new EventSource("play/events");
@@ -26,47 +27,6 @@ function(d3, trackTime, currentTrack) {
 	      trackTime(json);
 	      renderVolume(json);
 	  });
-
-      function showList(url, containerNode) {
-	d3.json(url, function(error, json){
-	  if (error) return console.warn(error);
-
-	  var thisRow =
-	  d3.select(containerNode)
-	  .selectAll("div").data(json)
-	    .enter()
-	    .append("div")
-	    .classed("artist", function(d){return d.isArtist})
-	    .classed("album", function(d){return d.isAlbum})
-	    .classed("song", function(d){return d.isSong})
-
-	  thisRow.on("click", (function(d){
-	      d3.event.stopPropagation();
-	      if (d.listActionUrl){
-		if (! this.getAttribute("expanded")){
-		  this.setAttribute("expanded", true);
-		  showList(d.listActionUrl, this);
-		}
-		else{
-		  d3.select(this).selectAll("div").remove();
-		  this.removeAttribute("expanded");
-		}
-	      }
-	    }));
-
-	  thisRow.append("span").text(function(d){
-	      return d.name;
-	    });
-
-	  thisRow.append("span").text(function(d){
-	      return d.playActionUrl? " - play" : "";
-	      })
-	    .on("click", function(d){
-		 playerControl(d.playActionUrl);
-	       });
-	});
-      }
-
 
       function volume(url){
 	  d3.json(url, function(error, json){
