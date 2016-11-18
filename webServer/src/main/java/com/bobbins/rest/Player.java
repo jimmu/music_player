@@ -130,6 +130,7 @@ public class Player {
         return eventOutput;
     }
 
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("next")
     public PlayingStatusBean next() {

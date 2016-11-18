@@ -29,22 +29,22 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
 	  var source = new EventSource("play/events");
 	  source.addEventListener('player-state-change', function(event){
 	      var json = JSON.parse(event.data);
-	      //console.log(JSON.stringify(json));
-	      currentTrack(json);
-	      controls(json);
-	      trackTime(json);
-	      volume(json);
+              drawTopSection(json);
 	  });
 
 
       function playerControl(url){
 	  d3.json(url, function(error, json){
 	      if (error) return console.warn(error);
-	      controls(json);
-	      trackTime(json);
-	      currentTrack(json);
-	      volume(json);
+              drawTopSection(json);
 	  });
+      }
+
+      function drawTopSection(json){
+	controls(json);
+	trackTime(json);
+	currentTrack(json);
+	volume(json);
       }
 
     }
