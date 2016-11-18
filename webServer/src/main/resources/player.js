@@ -1,7 +1,8 @@
 define(["d3.v3.min"
+	,"trackTime"
        ]
 ,
-function(d3) {
+function(d3, trackTime) {
   return function(url, containerNode){
       function setup(){
 	  // There may already be music playing. If so, find out and show it.
@@ -9,7 +10,7 @@ function(d3) {
 	      if (error) return console.warn(error);
 	      renderCurrentTrack(json);
 	      renderControls(json);
-	      renderTrackTime(json);
+	      trackTime(json);
 	      renderVolume(json);
 	  });
 	  showList(url, containerNode);
@@ -21,7 +22,7 @@ function(d3) {
 	      console.log(JSON.stringify(json));
 	      renderCurrentTrack(json);
 	      renderControls(json);
-	      renderTrackTime(json);
+	      trackTime(json);
 	      renderVolume(json);
 	  });
 
@@ -77,7 +78,7 @@ function(d3) {
 	  d3.json(url, function(error, json){
 	      if (error) return console.warn(error);
 	      renderControls(json);
-	      renderTrackTime(json);
+	      trackTime(json);
 	      renderCurrentTrack(json);
 	      renderVolume(json);
 	  });
@@ -135,32 +136,6 @@ function(d3) {
 			  .on("click", (function(d){
 			      playerControl(d.nextTrackActionUrl);
 			  }));
-      }
-
-      function renderTrackTime(json){
-	  var timeSection = d3.select("#trackTime").datum(json);
-	  timeSection.html(""); 
-	  timeSection.append("span")
-			  .classed("elapsedTime", true)
-			  .text(function(d){return formatTime(d.elapsedTime)});
-
-	  //Doing this with svg - overkill? DIVs would probably do fine.
-	  var barHeight = 16;
-	  var barWidth = 100;
-	  var svg = timeSection.append("svg").attr("width", barWidth).attr("height", barHeight);
-	  svg.append("rect").attr("x", 0).attr("y",0)
-	      .attr("width", function(d){return barWidth*d.elapsedTime/d.songLength})
-	      .attr("height", barHeight)
-	      .attr("fill", "teal");  //TODO: Can the colour be applied via css class instead?
-	  svg.append("rect").attr("x", function(d){return barWidth*d.elapsedTime/d.songLength})
-	      .attr("y",0)
-	      .attr("width", function(d){return barWidth*(d.songLength-d.elapsedTime)/d.songLength})
-	      .attr("height", barHeight)
-	      .attr("fill", "gray");
-
-	  timeSection.append("span")
-			  .classed("trackLength", true)
-			  .text(function(d){return formatTime(d.songLength)});
       }
 
       function formatTime(seconds){
