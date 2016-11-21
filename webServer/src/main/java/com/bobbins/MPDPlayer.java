@@ -57,7 +57,6 @@ public class MPDPlayer implements Player {
             }
         }
         catch(MPDDatabaseException e){
-            e.printStackTrace();
             throw new PlayerException(e);
         }
         return files;
