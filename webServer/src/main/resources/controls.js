@@ -18,39 +18,41 @@ function(d3) {
         console.log("Clicked on "+url);
       }
 
-      function renderControls(json) {
-	  var controlsSection = d3.select("#controls").datum(json);
-	  controlsSection.html(""); 
-	  controlsSection.append("span")
-			  .classed("previousButton", true)
-			  .text("Previous")
-			  .on("click", (function(d){
-			      onPreviousHandler(d.previousTrackActionUrl);
-			  }));
-	  controlsSection.append("span")
-			  .classed("playButton", function(d){return !d.isPlaying})
-			  .text("Play")
-			  .on("click", (function(d){
-			      onPlayHandler(d.playActionUrl);
-			  }));
-	  controlsSection.append("span")
-			  .classed("pauseButton", function(d){return d.isPlaying})
-			  .text("Pause")
-			  .on("click", (function(d){
-			      onPauseHandler(d.pauseActionUrl);
-			  }));
-	  controlsSection.append("span")
-			  .classed("stopButton", function(d){return d.isPlaying})
-			  .text("Stop")
-			  .on("click", (function(d){
-			      onStopHandler(d.stopActionUrl);
-			  }));
-	  controlsSection.append("span")
-			  .classed("nextButton", true)
-			  .text("Next")
-			  .on("click", (function(d){
-			      onNextHandler(d.nextTrackActionUrl);
-			  }));
+      function renderControls(selection) {
+          selection.each(function(data,i){
+              var controlsSection = d3.select(this);
+              controlsSection.html("");
+              controlsSection.append("span")
+                      .classed("previousButton", true)
+                      .text("Previous")
+                      .on("click", (function(d){
+                          onPreviousHandler(d.previousTrackActionUrl);
+                      }));
+              controlsSection.append("span")
+                      .classed("playButton", function(d){return !d.isPlaying})
+                      .text("Play")
+                      .on("click", (function(d){
+                          onPlayHandler(d.playActionUrl);
+                      }));
+              controlsSection.append("span")
+                      .classed("pauseButton", function(d){return d.isPlaying})
+                      .text("Pause")
+                      .on("click", (function(d){
+                          onPauseHandler(d.pauseActionUrl);
+                      }));
+              controlsSection.append("span")
+                      .classed("stopButton", function(d){return d.isPlaying})
+                      .text("Stop")
+                      .on("click", (function(d){
+                          onStopHandler(d.stopActionUrl);
+                      }));
+              controlsSection.append("span")
+                      .classed("nextButton", true)
+                      .text("Next")
+                      .on("click", (function(d){
+                          onNextHandler(d.nextTrackActionUrl);
+                      }));
+              });
       }
 
       renderControls.onPlay=function(value){

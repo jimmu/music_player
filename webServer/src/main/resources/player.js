@@ -1,13 +1,13 @@
 define(["d3.v3.min"
         ,"catalogue"
-	,"trackTime"
+	    ,"trackTime"
         ,"track"
         ,"volume"
         ,"controls"
        ]
 ,
 function(d3, catalogue, trackTime, currentTrack, volume, controls) {
-  return function(url, containerNode){
+  return function(url){
       function setup(){
 	  // There may already be music playing. If so, find out and show it.
           controls.onPlay(playerControl)
@@ -18,12 +18,10 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
 
 	  d3.json("play/status", function(error, json){
 	      if (error) return console.warn(error);
-	      currentTrack(json);
-	      controls(json);
-	      trackTime(json);
-	      volume(json);
-	  });
-          catalogue.onPlay(playerControl)(url, containerNode);
+          drawTopSection(json);	  });
+      var catalogueRenderer = catalogue.onPlay(playerControl);
+	  d3.selectAll("#tracks").datum({"listActionUrl": "list"}).call(catalogueRenderer);
+
 	  //Now set up push event listener.
 	  console.log("About to set up event source");
 	  var source = new EventSource("play/events");
@@ -41,10 +39,10 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
       }
 
       function drawTopSection(json){
-	controls(json);
-	trackTime(json);
-	currentTrack(json);
-	volume(json);
+        d3.selectAll("#controls").datum(json).call(controls);
+        d3.selectAll("#trackTime").datum(json).call(trackTime);
+        d3.selectAll("#nowPlaying").datum(json).call(currentTrack);
+        d3.selectAll("#volume").datum(json).call(volume);
       }
 
     }
