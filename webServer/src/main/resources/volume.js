@@ -21,12 +21,47 @@ function(d3) {
               .on("click", (function(d){
                 onClickHandler(d.volumeDownUrl);
               }));
-          volumeSection.append("span").classed("volume", true).text(function(d){return d.volume})
+          //volumeSection.append("span").classed("volume", true).text(function(d){return d.volume})
+
+            //Doing this with svg - overkill? DIVs would probably do fine.
+          var barHeight = 16;
+          var barWidth = 150;
+          var maxVolume = 100;
+          var svg = volumeSection.append("svg").attr("width", barWidth).attr("height", barHeight);
+            svg.append("rect").attr("x", 0).attr("y",0)
+            .attr("width", function(d){return barWidth*d.volume/maxVolume})
+            .attr("height", barHeight)
+            .attr("fill", "orange");  //TODO: Can the colour be applied via css class instead?
+            svg.append("rect").attr("x", function(d){return barWidth*d.volume/maxVolume})
+            .attr("y",0)
+            .attr("width", function(d){return barWidth*(Math.max(0, maxVolume-d.volume))/maxVolume})
+            .attr("height", barHeight)
+            .attr("fill", "gray");
+            var volumeClickTarget = svg.append("rect").attr("x", 0)
+                        .attr("y",0)
+                        .attr("width", barWidth)
+                        .attr("height", barHeight)
+                        .attr("pointer-events", "all")
+                        .attr("fill", "none"); //Invisible. Just to collect mouse clicks.
+
           volumeSection.append("span").classed("volumeUpDown", true).text(" + ")
               .on("click", (function(d){
-                onClickHandler(d.volumeUpUrl);
-              }));
+                                onClickHandler(d.volumeUpUrl);
+                              }));
+
+          volumeClickTarget.on("click", (function(d){
+                              var clickEvent = d3.event;
+                              var clickTarget = d3.event.target;
+                              var dimensions = clickTarget.getBoundingClientRect();
+                              var clickX = d3.event.clientX - dimensions.left;
+                              //Now convert clickX to something in the range 0-maxVolume
+                              var clickedVolume = Math.round(maxVolume*clickX/barWidth);
+                              //And now call the set-volume URL
+                              onClickHandler(d.volumeUrl+clickedVolume);
+                           }));
+
           });
+
       }
 
     renderVolume.onClick=function(value){
