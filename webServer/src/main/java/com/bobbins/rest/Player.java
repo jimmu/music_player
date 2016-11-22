@@ -1,16 +1,14 @@
 package com.bobbins.rest;
 
-import java.io.IOException;
-
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
+import com.bobbins.EventSendingListener;
 import com.bobbins.PlayerException;
 import com.bobbins.PlayerFactory;
 import com.bobbins.PlayerListener;
 import com.bobbins.model.PlayingStatusBean;
 import org.glassfish.jersey.media.sse.EventOutput;
-import org.glassfish.jersey.media.sse.OutboundEvent;
 import org.glassfish.jersey.media.sse.SseFeature;
 
 @Path("play")
@@ -111,34 +109,7 @@ public class Player {
     public EventOutput getServerSentEvents(){
 	final EventOutput eventOutput = new EventOutput();
         System.out.println("**** Creating a new event sender");
-        final PlayerListener listener = new PlayerListener(){
-            public void onChange(PlayingStatusBean state){
-                try {
-                    final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
-                    eventBuilder.name("player-state-change");
-                    eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
-                    eventBuilder.data(PlayingStatusBean.class, state);
-                    final OutboundEvent event = eventBuilder.build();
-                    if (eventOutput.isClosed()){    //TODO. Work out if/when we should close this.
-                        System.out.println("Oh - the EventOutput object is closed!");
-                        System.out.println("*NOT* writing: "+event);
-                    }
-                    else {
-                        eventOutput.write(event);
-                    }
-                } catch (IOException e) {
-                    throw new RuntimeException(
-                        "Error when writing the event.", e);
-                } //finally {
-                        //try {
-                            //eventOutput.close();
-                        //} catch (IOException ioClose) {
-                            //throw new RuntimeException(
-                                //"Error when closing the event output.", ioClose);
-                        //}
-                    //}
-            }
-        };
+        PlayerListener listener = new EventSendingListener(eventOutput);
         try {
 	        PlayerFactory.getPlayer().listenForChanges(listener);
     	}
