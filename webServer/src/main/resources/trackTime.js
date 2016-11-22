@@ -2,7 +2,18 @@ define(["d3.v3.min"]
 ,
 function(d3) {
 
-      return function(selection){
+      var originalSelection;
+
+      var onClickHandler = function(url){
+        d3.json(url, function(error, json){
+          if (error) return console.warn(error);
+            originalSelection.datum(json);
+            renderTrackTime(originalSelection);
+        });
+      }
+
+      function renderTrackTime(selection){
+        originalSelection = selection;
         selection.each(function(data,i){
           var timeSection = d3.select(this);
           timeSection.html("");
@@ -23,10 +34,27 @@ function(d3) {
               .attr("width", function(d){return barWidth*(Math.max(0, d.songLength-d.elapsedTime))/d.songLength})
               .attr("height", barHeight)
               .attr("fill", "gray");
+          var trackPositionClickTarget = svg.append("rect").attr("x", 0)
+                        .attr("y",0)
+                        .attr("width", barWidth)
+                        .attr("height", barHeight)
+                        .attr("pointer-events", "all")
+                        .attr("fill", "none"); //Invisible. Just to collect mouse clicks.
 
           timeSection.append("span")
                   .classed("trackLength", true)
                   .text(function(d){return formatTime(Math.max(0, d.songLength-d.elapsedTime))});
+
+          trackPositionClickTarget.on("click", (function(d){
+                              var clickEvent = d3.event;
+                              var clickTarget = d3.event.target;
+                              var dimensions = clickTarget.getBoundingClientRect();
+                              var clickX = d3.event.clientX - dimensions.left;
+                              //Now convert clickX to something in the range 0-songLength
+                              var clickedSeconds = Math.round(d.songLength*clickX/barWidth);
+                              //And now call the set-track-position URL
+                              onClickHandler(d.seekPositionUrl+clickedSeconds);
+                           }));
 
               function formatTime(seconds){
                 var someDate = new Date(2016, 1, 1);
@@ -37,4 +65,12 @@ function(d3) {
               }
           });
       };
+
+      renderTrackTime.onClick=function(value){
+          if (!arguments.length) return onClickHandler;
+          onClickHandler = value
+          return renderTrackTime;
+        }
+
+      return renderTrackTime;
 });

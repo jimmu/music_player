@@ -71,6 +71,18 @@ public class Player {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("seek")
+    public PlayingStatusBean seek(@QueryParam("position") Integer positionInSeconds) {
+        try {
+            return PlayerFactory.getPlayer().seek(positionInSeconds);
+        } catch (PlayerException e) {
+            e.printStackTrace();
+        }
+        return null; //TODO. Return a 500 series error
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("pause")
     public PlayingStatusBean pause() {
         try {

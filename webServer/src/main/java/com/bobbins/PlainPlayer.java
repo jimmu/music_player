@@ -6,6 +6,7 @@ import org.bff.javampd.exception.MPDPlayerException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.SyncFailedException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -150,6 +151,12 @@ public class PlainPlayer implements Player {
     @Override
     public PlayingStatusBean play() throws PlayerException {
         isPlaying = true;
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean seek(int positionInSeconds) throws PlayerException {
+        songStartTime = System.currentTimeMillis()-(positionInSeconds*1000);
         return getStatus();
     }
 }

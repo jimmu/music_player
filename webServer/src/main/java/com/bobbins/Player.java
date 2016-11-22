@@ -21,4 +21,5 @@ public interface Player {
     public PlayingStatusBean next() throws PlayerException;
     public PlayingStatusBean previous() throws PlayerException;
     public PlayingStatusBean play() throws PlayerException;
+    public PlayingStatusBean seek(int positionInSeconds) throws PlayerException;
 }

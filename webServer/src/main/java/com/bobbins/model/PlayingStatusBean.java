@@ -15,6 +15,7 @@ public class PlayingStatusBean {
   public String volumeUpUrl;
   public String volumeDownUrl;
   public String volumeUrl;
+  public String seekPositionUrl;
   public Integer volume;
   public Boolean isPlaying;
   public Integer songLength;
@@ -38,5 +39,6 @@ public class PlayingStatusBean {
     this.volumeUpUrl="play/volume?volume="+(volume+1);
     this.volumeDownUrl="play/volume?volume="+(volume-1);
     this.volumeUrl="play/volume?volume=";
+    this.seekPositionUrl="play/seek?position=";
   }
 }
