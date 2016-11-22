@@ -3,6 +3,6 @@ function main(){
   require(["player"]
   ,
   function(playerThing){
-    playerThing("list")();
+    playerThing();
   });
 }

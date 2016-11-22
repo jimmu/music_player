@@ -26,7 +26,7 @@ function(d3) {
 
           timeSection.append("span")
                   .classed("trackLength", true)
-                  .text(function(d){return formatTime(d.songLength)});
+                  .text(function(d){return formatTime(Math.max(0, d.songLength-d.elapsedTime))});
 
               function formatTime(seconds){
                 var someDate = new Date(2016, 1, 1);

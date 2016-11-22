@@ -7,35 +7,26 @@ define(["d3.v3.min"
        ]
 ,
 function(d3, catalogue, trackTime, currentTrack, volume, controls) {
-  return function(url){
-      function setup(){
-	  // There may already be music playing. If so, find out and show it.
-          controls.onPlay(playerControl)
-		.onPause(playerControl)
-		.onStop(playerControl)
-		.onNext(playerControl)
-		.onPrevious(playerControl);
+  return function(){
+      controls.onPlay(playerControl)
+	  .onPause(playerControl)
+	  .onStop(playerControl)
+	  .onNext(playerControl)
+	  .onPrevious(playerControl);
 
+	  // There may already be music playing. If so, find out and show it.
 	  d3.json("play/status", function(error, json){
 	      if (error) return console.warn(error);
-          drawTopSection(json);	  });
-      var catalogueRenderer = catalogue.onPlay(playerControl);
-	  d3.selectAll("#tracks").datum({"listActionUrl": "list"}).call(catalogueRenderer);
-
-	  //Now set up push event listener.
-	  console.log("About to set up event source");
-	  var source = new EventSource("play/events");
-	  source.addEventListener('player-state-change', function(event){
-	      var json = JSON.parse(event.data);
-              drawTopSection(json);
-	  });
-
+          drawTopSection(json);
+      });
+      drawBottomSection();
+	  setupEventListener();
 
       function playerControl(url){
-	  d3.json(url, function(error, json){
-	      if (error) return console.warn(error);
+          d3.json(url, function(error, json){
+              if (error) return console.warn(error);
               drawTopSection(json);
-	  });
+          });
       }
 
       function drawTopSection(json){
@@ -45,7 +36,17 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
         d3.selectAll("#volume").datum(json).call(volume);
       }
 
-    }
-    return setup;
+      function drawBottomSection(){
+          var catalogueRenderer = catalogue.onPlay(playerControl);
+          d3.selectAll("#tracks").datum({"listActionUrl": "list"}).call(catalogueRenderer);
+      }
+
+      function setupEventListener(){
+          var source = new EventSource("play/events");
+          source.addEventListener('player-state-change', function(event){
+              var json = JSON.parse(event.data);
+              drawTopSection(json);
+          });
+      }
   }
 });

@@ -100,30 +100,30 @@ public class Player {
 	final EventOutput eventOutput = new EventOutput();
         System.out.println("**** Creating a new event sender");
         final PlayerListener listener = new PlayerListener(){
-	    public void onChange(PlayingStatusBean state){
+            public void onChange(PlayingStatusBean state){
                 try {
-			final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
-			eventBuilder.name("player-state-change");
-			eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
-			eventBuilder.data(PlayingStatusBean.class, state);
-			final OutboundEvent event = eventBuilder.build();
-			eventOutput.write(event);
+                    final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+                    eventBuilder.name("player-state-change");
+                    eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
+                    eventBuilder.data(PlayingStatusBean.class, state);
+                    final OutboundEvent event = eventBuilder.build();
+                    eventOutput.write(event);
                 } catch (IOException e) {
                     throw new RuntimeException(
                         "Error when writing the event.", e);
                 } //finally {
-                    //try {
-                        //eventOutput.close();
-                    //} catch (IOException ioClose) {
-                        //throw new RuntimeException(
-                            //"Error when closing the event output.", ioClose);
+                        //try {
+                            //eventOutput.close();
+                        //} catch (IOException ioClose) {
+                            //throw new RuntimeException(
+                                //"Error when closing the event output.", ioClose);
+                        //}
                     //}
-                //}
-	    }
+            }
         };
         try {
-	    PlayerFactory.getPlayer().listenForChanges(listener);
-	}
+	        PlayerFactory.getPlayer().listenForChanges(listener);
+    	}
         catch(PlayerException e){
             e.printStackTrace();
         }
