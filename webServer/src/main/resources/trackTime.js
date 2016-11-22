@@ -28,12 +28,12 @@ function(d3) {
           svg.append("rect").attr("x", 0).attr("y",0)
               .attr("width", function(d){return barWidth*d.elapsedTime/d.songLength})
               .attr("height", barHeight)
-              .attr("fill", "teal");  //TODO: Can the colour be applied via css class instead?
+              .classed("trackTimeBarFilled", true);
           svg.append("rect").attr("x", function(d){return barWidth*d.elapsedTime/d.songLength})
               .attr("y",0)
               .attr("width", function(d){return barWidth*(Math.max(0, d.songLength-d.elapsedTime))/d.songLength})
               .attr("height", barHeight)
-              .attr("fill", "gray");
+              .classed("trackTimeBarUnfilled", true);
           var trackPositionClickTarget = svg.append("rect").attr("x", 0)
                         .attr("y",0)
                         .attr("width", barWidth)

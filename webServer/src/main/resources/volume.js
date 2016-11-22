@@ -31,12 +31,12 @@ function(d3) {
             svg.append("rect").attr("x", 0).attr("y",0)
             .attr("width", function(d){return barWidth*d.volume/maxVolume})
             .attr("height", barHeight)
-            .attr("fill", "orange");  //TODO: Can the colour be applied via css class instead?
+            .classed("volumeBarFilled", true);
             svg.append("rect").attr("x", function(d){return barWidth*d.volume/maxVolume})
             .attr("y",0)
             .attr("width", function(d){return barWidth*(Math.max(0, maxVolume-d.volume))/maxVolume})
             .attr("height", barHeight)
-            .attr("fill", "gray");
+            .classed("volumeBarUnfilled", true);
             var volumeClickTarget = svg.append("rect").attr("x", 0)
                         .attr("y",0)
                         .attr("width", barWidth)

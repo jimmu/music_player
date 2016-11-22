@@ -119,7 +119,13 @@ public class Player {
                     eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
                     eventBuilder.data(PlayingStatusBean.class, state);
                     final OutboundEvent event = eventBuilder.build();
-                    eventOutput.write(event);
+                    if (eventOutput.isClosed()){    //TODO. Work out if/when we should close this.
+                        System.out.println("Oh - the EventOutput object is closed!");
+                        System.out.println("*NOT* writing: "+event);
+                    }
+                    else {
+                        eventOutput.write(event);
+                    }
                 } catch (IOException e) {
                     throw new RuntimeException(
                         "Error when writing the event.", e);
