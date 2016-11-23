@@ -1,6 +1,6 @@
-define(["d3.v3.min"]
+define(["d3.v3.min", "timeFormat"]
 ,
-function(d3) {
+function(d3, timeFormat) {
 
       var originalSelection;
 
@@ -19,7 +19,7 @@ function(d3) {
           timeSection.html("");
           timeSection.append("span")
                   .classed("elapsedTime", true)
-                  .text(function(d){return formatTime(d.elapsedTime)});
+                  .text(function(d){return timeFormat(d.elapsedTime)});
 
           //Doing this with svg - overkill? DIVs would probably do fine.
           var barHeight = 16;
@@ -43,7 +43,7 @@ function(d3) {
 
           timeSection.append("span")
                   .classed("trackLength", true)
-                  .text(function(d){return formatTime(Math.max(0, d.songLength-d.elapsedTime))});
+                  .text(function(d){return timeFormat(Math.max(0, d.songLength-d.elapsedTime))});
 
           trackPositionClickTarget.on("click", (function(d){
                               var clickEvent = d3.event;
@@ -55,14 +55,6 @@ function(d3) {
                               //And now call the set-track-position URL
                               onClickHandler(d.seekPositionUrl+clickedSeconds);
                            }));
-
-              function formatTime(seconds){
-                var someDate = new Date(2016, 1, 1);
-                var unixEpochStyle = +someDate;
-                var withOurSeconds = unixEpochStyle+(seconds*1000);
-                var formatter = d3.time.format("%M:%S");
-                return formatter(new Date(withOurSeconds));
-              }
           });
       };
 
