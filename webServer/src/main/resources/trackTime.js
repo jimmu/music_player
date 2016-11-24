@@ -1,6 +1,6 @@
-define(["d3.v3.min", "timeFormat"]
+define(["d3.v3.min", "timeFormat", "progressBar"]
 ,
-function(d3, timeFormat) {
+function(d3, timeFormat, progressBar) {
 
       var originalSelection;
 
@@ -15,54 +15,36 @@ function(d3, timeFormat) {
       function renderTrackTime(selection){
         originalSelection = selection;
         selection.each(function(data,i){
+          var barRenderer = progressBar()
+		  .getValue(function(d){return d.elapsedTime})
+		  .maxValue(data.songLength)
+		  .getUrl(function(d){return d.seekPositionUrl})
+		  .classFilledBar("trackTimeBarFilled")
+		  .classUnfilledBar("trackTimeBarUnfilled")
+		  .width(100)
+		  .height(16);
+
           var timeSection = d3.select(this);
-          timeSection.html("");
-          timeSection.append("span")
-                  .classed("elapsedTime", true)
-                  .text(function(d){return timeFormat(d.elapsedTime)});
+	  timeSection.call(barRenderer);
 
-          //Doing this with svg - overkill? DIVs would probably do fine.
-          var barHeight = 16;
-          var barWidth = 100;
-          var svg = timeSection.append("svg").attr("width", barWidth).attr("height", barHeight);
-          svg.append("rect").attr("x", 0).attr("y",0)
-              .attr("width", function(d){return barWidth*d.elapsedTime/d.songLength})
-              .attr("height", barHeight)
-              .classed("trackTimeBarFilled", true);
-          svg.append("rect").attr("x", function(d){return barWidth*d.elapsedTime/d.songLength})
-              .attr("y",0)
-              .attr("width", function(d){return barWidth*(Math.max(0, d.songLength-d.elapsedTime))/d.songLength})
-              .attr("height", barHeight)
-              .classed("trackTimeBarUnfilled", true);
-          var trackPositionClickTarget = svg.append("rect").attr("x", 0)
-                        .attr("y",0)
-                        .attr("width", barWidth)
-                        .attr("height", barHeight)
-                        .attr("pointer-events", "all")
-                        .attr("fill", "none"); //Invisible. Just to collect mouse clicks.
+	  //TODO - Make this update/enter stuff a bit cleaner.
+          var clocks = timeSection.selectAll("span");
+          if (clocks.empty()){
+            timeSection.insert("span").classed("elapsedTime", true)
+		.text(function(d){return timeFormat(d.elapsedTime)});
 
-          timeSection.append("span")
-                  .classed("trackLength", true)
-                  .text(function(d){return timeFormat(Math.max(0, d.songLength-d.elapsedTime))});
+            timeSection.append("span").classed("trackLength", true)
+		.text(function(d){return timeFormat(Math.max(0, data.songLength-data.elapsedTime))});
+          }
+          else {
+            clocks.data([{"time": data.elapsedTime},
+                         {"time": Math.max(0, data.songLength-data.elapsedTime)}])
+	    .text(function(d){return timeFormat(d.time)});
+          }
 
-          trackPositionClickTarget.on("click", (function(d){
-                              var clickEvent = d3.event;
-                              var clickTarget = d3.event.target;
-                              var dimensions = clickTarget.getBoundingClientRect();
-                              var clickX = d3.event.clientX - dimensions.left;
-                              //Now convert clickX to something in the range 0-songLength
-                              var clickedSeconds = Math.round(d.songLength*clickX/barWidth);
-                              //And now call the set-track-position URL
-                              onClickHandler(d.seekPositionUrl+clickedSeconds);
-                           }));
+
           });
       };
-
-      renderTrackTime.onClick=function(value){
-          if (!arguments.length) return onClickHandler;
-          onClickHandler = value
-          return renderTrackTime;
-        }
 
       return renderTrackTime;
 });
