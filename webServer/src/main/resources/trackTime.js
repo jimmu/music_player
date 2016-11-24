@@ -30,7 +30,7 @@ function(d3, timeFormat, progressBar) {
 	  //TODO - Make this update/enter stuff a bit cleaner.
           var clocks = timeSection.selectAll("span");
           if (clocks.empty()){
-            timeSection.insert("span").classed("elapsedTime", true)
+            timeSection.insert("span", ":first-child").classed("elapsedTime", true)
 		.text(function(d){return timeFormat(d.elapsedTime)});
 
             timeSection.append("span").classed("trackLength", true)

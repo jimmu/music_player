@@ -31,7 +31,7 @@ function(d3, progressBar) {
 	  //TODO - Make this update/enter stuff a bit cleaner.
 	  var plusMinusButtons = volumeSection.selectAll("span");
 	  if (plusMinusButtons.empty()){
-	    volumeSection.insert("span").classed("volumeUpDown", true).text(" - ")
+	    volumeSection.insert("span", ":first-child").classed("volumeUpDown", true).text(" - ")
 		.on("click", (function(d){
 		  onClickHandler(d.volumeDownUrl);
 		}));
