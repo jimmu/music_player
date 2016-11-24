@@ -24,7 +24,7 @@ public class Gui {
     @Path("{script}")
     public InputStream script(@PathParam("script") String script){
       String fileName = "/"+script;
-      if (!fileName.endsWith(".js")){
+      if (!fileName.contains(".")){
         fileName = fileName+".js";
       } 
       InputStream is = Gui.class.getResourceAsStream(fileName);

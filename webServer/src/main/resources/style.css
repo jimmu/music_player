@@ -1,0 +1,61 @@
+div {
+    border: 1px;
+    padding-left: 12px;
+}
+.infoPanel {
+    position: fixed;
+    height: 4em;
+    width: 100%;
+    background-color: white;
+}
+.musicLibraryPanel{
+    padding-top: 5em;
+}
+.artist {
+    background-color: #dd6644;
+}
+.album {
+    background-color: #dd9944;
+}
+.song {
+    background-color: #ddcc44;
+}
+.playing {
+    background-color: #ddccdd;
+}
+.volumeUpDown {
+    background-color: #ccbbcc;
+}
+.pauseButton {
+    background-color: #bbaabb;
+}
+.stopButton {
+    background-color: #aa99aa;
+}
+.trackLength {
+    background-color: #998899;
+}
+.elapsedTime {
+    background-color: #887788;
+}
+.nextButton {
+    background-color: #998899;
+}
+.previousButton {
+    background-color: #887788;
+}
+.playButton {
+    background-color: #776677;
+}
+.volumeBarFilled {
+    fill: teal;
+}
+.volumeBarUnfilled {
+    fill: gray;
+}
+.trackTimeBarFilled{
+    fill: orange;
+}
+.trackTimeBarUnfilled{
+    fill: gray;
+}
