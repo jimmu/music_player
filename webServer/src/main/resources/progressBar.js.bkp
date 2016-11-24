@@ -1,0 +1,70 @@
+define(["d3.v3.min"]
+,
+function(d3) {
+
+    return function(){
+	var originalSelection;
+
+	var barWidth = 150;
+	var barHeight = 16;
+	var maxValue = 100;
+	var filledBarClass = "volumeBarFilled";
+	var unfilledBarClass = "volumeBarUnfilled";
+	var getUrl = function(d){return d.volumeUrl};
+
+	var onClickHandler = function(url){
+	  d3.json(url, function(error, json){
+	    if (error) return console.warn(error);
+	      originalSelection.datum(json);
+	      renderBar(originalSelection);
+	  });
+	}
+
+	function renderBar(selection){
+	  originalSelection = selection;
+	  selection.each(function(data,i){
+	    var barSection = d3.select(this);
+	    //barSection.html("");
+	    //Doing this with svg - overkill? DIVs would probably do fine.
+	    var svg = barSection.append("svg").attr("width", barWidth).attr("height", barHeight);
+	      svg.append("rect").attr("x", 0).attr("y",0)
+	      .attr("width", function(d){return barWidth*d.volume/maxValue})
+	      .attr("height", barHeight)
+	      .classed(filledBarClass, true);
+	    svg.append("rect").attr("x", function(d){return barWidth*d.volume/maxValue})
+	      .attr("y",0)
+	      .attr("width", function(d){return barWidth*(Math.max(0, maxValue-d.volume))/maxValue})
+	      .attr("height", barHeight)
+	      .classed(unfilledBarClass, true);
+
+	    var barClickTarget = svg.append("rect").attr("x", 0)
+			  .attr("y",0)
+			  .attr("width", barWidth)
+			  .attr("height", barHeight)
+			  .attr("pointer-events", "all")
+			  .attr("fill", "none"); //Invisible. Just to collect mouse clicks.
+
+	    barClickTarget.on("click", (function(d){
+				var clickEvent = d3.event;
+				var clickTarget = d3.event.target;
+				var dimensions = clickTarget.getBoundingClientRect();
+				var clickX = d3.event.clientX - dimensions.left;
+				//Now convert clickX to something in the range 0-maxValue
+				var clickedValue = Math.round(maxValue*clickX/barWidth);
+				//And now call the set-volume URL
+				onClickHandler(getUrl(d)+clickedValue);
+			     }));
+
+	    });
+
+	}
+
+	renderBar.onClick=function(value){
+	  if (!arguments.length) return onClickHandler;
+	  onClickHandler = value
+	  return renderBar;
+	}
+
+      return renderBar;
+    }
+});

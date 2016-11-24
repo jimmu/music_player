@@ -7,7 +7,6 @@ function(d3) {
 
       function catalogue(selection){
         selection.each(function(data,i){
-            console.log(data.listActionUrl);
             var thisSelection = this;
             d3.json(data.listActionUrl, function(error, json){
                 if (error) return console.warn(error);
