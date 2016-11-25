@@ -4,12 +4,12 @@ div {
 }
 .infoPanel {
     position: fixed;
-    height: 4em;
+    height: 6em;
     width: 100%;
     background-color: white;
 }
 .musicLibraryPanel{
-    padding-top: 5em;
+    padding-top: 7em;
 }
 .artist {
     background-color: #dd6644;

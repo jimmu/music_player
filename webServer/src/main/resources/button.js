@@ -12,19 +12,14 @@ function(d3) {
         selection.each(function(d,i){
             var buttonSection = d3.select(this);
             var svg=buttonSection.select("svg");
-            //if (svg.empty()){
-                svg = buttonSection.append("svg")
-                                    .attr("width", iconWidth)
-                                    .attr("height", iconHeight);
-            //}
-            var lineFunction = d3.svg.line()
-                                .x(function(d) { return d.x; })
-                                .y(function(d) { return d.y; })
-                                .interpolate("linear");
-            var lineGraph = svg.append("path")
-                                .attr("d", lineFunction(iconPath));
-            svg.on("click", onClickHandler);
-            svg.attr("class", iconClass);
+            svg = buttonSection.append("svg")
+                                .attr("width", iconWidth)
+                                .attr("height", iconHeight)
+                                .attr("class", iconClass);
+            svg.append("path")
+                .attr("d", iconPath)
+                .on("click", onClickHandler);
+
         });
     }
 

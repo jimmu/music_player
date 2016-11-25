@@ -22,23 +22,12 @@ function(d3, button) {
               var controlsSection = d3.select(this);
               controlsSection.html("");
 
-              var playPath = [{"x": 15,  "y": 15},
-                              {"x": 5,  "y": 25}, {"x": 5,   "y": 5},
-                              {"x": 15,  "y": 15}];
-              var ffwPath = [{"x": 5,   "y": 5},  {"x": 15,  "y": 15},
-                             {"x": 5,   "y": 25}, {"x": 5,   "y": 5},
-                             {"x": 15,  "y": 15},
-                             {"x": 15,  "y": 5},  {"x": 25,  "y": 15},
-                             {"x": 15,   "y": 25},{"x": 15,  "y": 5}];
-              var rwPath =  [{"x": 15,   "y": 15},  {"x": 25,  "y": 25},
-                             {"x": 25,   "y": 5}, {"x": 15,   "y": 15},
-                             {"x": 15,  "y": 5},  {"x": 5,  "y": 15},
-                             {"x": 15,   "y": 25},{"x": 15,  "y": 15}];
-              var stopPath =  [{"x": 5,   "y": 5},  {"x": 25,  "y": 5},
-                             {"x": 25,   "y": 25}, {"x": 5,   "y": 25},
-                             {"x": 5,  "y": 5}];
-              var pausePath = [{"x": 5,   "y": 5},  {"x": 5,  "y": 25},
-                             {"x": 15,   "y": 25}, {"x": 15,   "y": 5}];
+              var playPath  = "M 15 15 L 5 25  L 5 5   L 15 15";
+              var ffwPath   = "M 15 15 L 5 25  L 5 5   L 15 15   M 28 15 L 18 25 L 18 5  L 28 15";
+              var rwPath    = "M 18 15 L 28 25 L 28 5  L 18 15   M 15 5  L 5 15  L 15 25 L 15 5";
+              var stopPath  = "M 5  5  L 25 5  L 25 25 L 5 25 L 5 5";
+              var pausePath = "M 5  5  L 5 25  M 10 25 L 10 5";
+
               var buttonRenderer = button.width(40)
                                          .height(30);
               buttonRenderer.path(rwPath)
