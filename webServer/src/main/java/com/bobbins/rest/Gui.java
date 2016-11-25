@@ -14,8 +14,14 @@ public class Gui {
     @Produces(MediaType.TEXT_HTML)
     public InputStream gui(){
       // Note the leading slash.
-      InputStream is = Gui.class.getResourceAsStream("/index.html");
-      return is;
+      return Gui.class.getResourceAsStream("/index.html");
+    }
+
+    @GET
+    @Produces("text/css")
+    @Path("style")
+    public InputStream css(){
+        return Gui.class.getResourceAsStream("/style.css");
     }
 
     //This is a bit dangerous (it'll serve up any file!). //TODO. Make it less so.
