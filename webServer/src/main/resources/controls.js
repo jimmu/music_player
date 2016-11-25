@@ -1,20 +1,8 @@
 define(["d3.v3.min", "button"]
 ,
 function(d3, button) {
-      var onPlayHandler = function(url){
-        console.log("Clicked on "+url);
-      }
-      var onStopHandler = function(url){
-        console.log("Clicked on "+url);
-      }
-      var onPauseHandler = function(url){
-        console.log("Clicked on "+url);
-      }
-      var onNextHandler = function(url){
-        console.log("Clicked on "+url);
-      }
-      var onPreviousHandler = function(url){
-        console.log("Clicked on "+url);
+      var onClickHandler = function(url){
+        console.log("clicked on "+url)
       }
 
       function renderControls(selection) {
@@ -31,56 +19,36 @@ function(d3, button) {
               var buttonRenderer = button.width(40)
                                          .height(30);
               buttonRenderer.path(rwPath)
-                            .onClick(function(d){onPreviousHandler(d.previousTrackActionUrl)})
+                            .onClick(function(d){onClickHandler(d.previousTrackActionUrl)})
                             .classed(function(){return "playerButton previousButton"});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(playPath)
-                            .onClick(function(d){onPlayHandler(d.playActionUrl);})
+                            .onClick(function(d){onClickHandler(d.playActionUrl);})
                             .classed(function(d){return "playerButton" + (d.isPlaying? "" : " playButton")});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(pausePath)
-                            .onClick(function(d){onPauseHandler(d.pauseActionUrl)})
+                            .onClick(function(d){onClickHandler(d.pauseActionUrl)})
                             .classed(function(d){return "playerButton" + (d.isPlaying? " pauseButton" : "")});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(stopPath)
-                            .onClick(function(d){onStopHandler(d.stopActionUrl)})
+                            .onClick(function(d){onClickHandler(d.stopActionUrl)})
                             .classed(function(d){return "playerButton" + (d.isPlaying? " stopButton" : "")});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(ffwPath)
-                            .onClick(function(d){onNextHandler(d.nextTrackActionUrl)})
+                            .onClick(function(d){onClickHandler(d.nextTrackActionUrl)})
                             .classed(function(){return "playerButton nextButton"});
               controlsSection.call(buttonRenderer);
 
           });
       }
 
-      renderControls.onPlay=function(value){
-        if (!arguments.length) return onPlayHandler;
-        onPlayHandler = value
-        return renderControls;
-      }
-      renderControls.onStop=function(value){
-        if (!arguments.length) return onStopHandler;
-        onStopHandler = value
-        return renderControls;
-      }
-      renderControls.onPause=function(value){
-        if (!arguments.length) return onPauseHandler;
-        onPauseHandler = value
-        return renderControls;
-      }
-      renderControls.onNext=function(value){
-        if (!arguments.length) return onNextHandler;
-        onNextHandler = value
-        return renderControls;
-      }
-      renderControls.onPrevious=function(value){
-        if (!arguments.length) return onPreviousHandler;
-        onPreviousHandler = value
+      renderControls.onClick=function(value){
+        if (!arguments.length) return onClickHandler;
+        onClickHandler = value
         return renderControls;
       }
 
