@@ -3,10 +3,8 @@ package com.bobbins;
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
 import org.bff.javampd.MPD;
-import org.bff.javampd.events.PlayerChangeListener;
 import org.bff.javampd.events.PlayerBasicChangeListener;
 import org.bff.javampd.events.PlaylistBasicChangeListener;
-import org.bff.javampd.events.PlayerChangeEvent;
 import org.bff.javampd.events.PlayerBasicChangeEvent;
 import org.bff.javampd.events.PlaylistBasicChangeEvent;
 import org.bff.javampd.exception.MPDConnectionException;
@@ -79,11 +77,11 @@ public class MPDPlayer implements Player {
 	PlayingStatusBean status;
 	try {
 	    MPDSong currentSong = mpd.getPlayer().getCurrentSong();
-	    String songName = currentSong.getName(); // Album and Artist also available here.
+	    String songName = (currentSong == null? "-- Nothing playing --" : currentSong.getName()); // Album and Artist also available here.
 	    int volume = mpd.getPlayer().getVolume();
         org.bff.javampd.Player.Status playerStatus = mpd.getPlayer().getStatus();
         Boolean isPlaying = STATUS_PLAYING.equals(playerStatus);
- 	    Integer songLength = currentSong.getLength();
+ 	    Integer songLength = (currentSong == null? 0: currentSong.getLength());
         Long elapsedSeconds = mpd.getPlayer().getElapsedTime();
         status = new PlayingStatusBean(songName, volume, isPlaying, songLength, elapsedSeconds);
         } catch (MPDPlayerException e) {
