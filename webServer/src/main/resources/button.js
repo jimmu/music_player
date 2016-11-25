@@ -15,10 +15,10 @@ function(d3) {
             svg = buttonSection.append("svg")
                                 .attr("width", iconWidth)
                                 .attr("height", iconHeight)
-                                .attr("class", iconClass);
+                                .attr("class", iconClass)
+                                .on("click", onClickHandler);
             svg.append("path")
-                .attr("d", iconPath)
-                .on("click", onClickHandler);
+                .attr("d", iconPath);
 
         });
     }

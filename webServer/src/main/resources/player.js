@@ -8,11 +8,7 @@ define(["d3.v3.min"
 ,
 function(d3, catalogue, trackTime, currentTrack, volume, controls) {
   return function(){
-      controls.onPlay(playerControl)
-	  .onPause(playerControl)
-	  .onStop(playerControl)
-	  .onNext(playerControl)
-	  .onPrevious(playerControl);
+      controls.onClick(playerControl);
 
 	  // There may already be music playing. If so, find out and show it.
 	  d3.json("play/status", function(error, json){
