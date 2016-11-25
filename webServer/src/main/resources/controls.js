@@ -43,27 +43,27 @@ function(d3, button) {
                                          .height(30);
               buttonRenderer.path(rwPath)
                             .onClick(function(d){onPreviousHandler(d.previousTrackActionUrl)})
-                            .classed("previousButton", function(){return true});
+                            .classed(function(){return "playerButton previousButton"});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(playPath)
                             .onClick(function(d){onPlayHandler(d.playActionUrl);})
-                            .classed("playButton", function(d){return !d.isPlaying});
+                            .classed(function(d){return "playerButton" + (d.isPlaying? "" : " playButton")});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(pausePath)
                             .onClick(function(d){onPauseHandler(d.pauseActionUrl)})
-                            .classed("pauseButton", function(d){return d.isPlaying})
+                            .classed(function(d){return "playerButton" + (d.isPlaying? " pauseButton" : "")});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(stopPath)
                             .onClick(function(d){onStopHandler(d.stopActionUrl)})
-                            .classed("stopButton", function(d){return d.isPlaying});
+                            .classed(function(d){return "playerButton" + (d.isPlaying? " stopButton" : "")});
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(ffwPath)
                             .onClick(function(d){onNextHandler(d.nextTrackActionUrl)})
-                            .classed("nextButton", function(){return true});
+                            .classed(function(){return "playerButton nextButton"});
               controlsSection.call(buttonRenderer);
 
           });

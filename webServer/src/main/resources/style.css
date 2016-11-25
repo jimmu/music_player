@@ -38,6 +38,11 @@ div {
 .elapsedTime {
     background-color: #887788;
 }
+.playerButton{
+    stroke-width: 2;
+    stroke: orange;
+    fill: none;
+}
 .nextButton {
     background-color: #998899;
 }

@@ -5,8 +5,7 @@ function(d3) {
     var iconPath = "";
     var iconWidth = 32;
     var iconHeight = 32;
-    var iconClass = "button";
-    var iconClassCondition = function(){return true};
+    var iconClass = function(){return ""};
     var onClickHandler = function(){console.log("Clicked!")};
 
     function renderButton(selection){
@@ -23,12 +22,9 @@ function(d3) {
                                 .y(function(d) { return d.y; })
                                 .interpolate("linear");
             var lineGraph = svg.append("path")
-                                .attr("d", lineFunction(iconPath))
-                                .attr("stroke", "blue")
-                                .attr("stroke-width", 2)
-                                .attr("fill", "none");
+                                .attr("d", lineFunction(iconPath));
             svg.on("click", onClickHandler);
-            svg.classed(iconClass, iconClassCondition)
+            svg.attr("class", iconClass);
         });
     }
 
@@ -47,10 +43,9 @@ function(d3) {
         iconHeight = value;
         return renderButton;
     }
-    renderButton.classed=function(klass, condition){
+    renderButton.classed=function(value){
         if (!arguments.length) return iconClass;
-        iconClass = klass;
-        iconClassCondition = condition;
+        iconClass = value;
         return renderButton;
     }
     renderButton.onClick=function(value){
