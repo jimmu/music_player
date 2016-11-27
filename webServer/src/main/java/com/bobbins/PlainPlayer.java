@@ -2,13 +2,10 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
-import org.bff.javampd.exception.MPDPlayerException;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.SyncFailedException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
@@ -23,7 +20,7 @@ public class PlainPlayer implements Player {
     private long songStartTime = System.currentTimeMillis();
 
     @Override
-    public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
+    public List<FilesystemEntryBean> list(String artist, String album) {
         List<FilesystemEntryBean> files = new ArrayList<FilesystemEntryBean>();
         try {
             if (rootPath == null) {
@@ -83,7 +80,7 @@ public class PlainPlayer implements Player {
     }
 
     @Override
-    public PlayingStatusBean play(String artist, String album, String song) throws PlayerException {
+    public PlayingStatusBean play(String artist, String album, String song) {
         String playThis = artist+":"+album+":"+song;
         System.out.println("Play: "+playThis);
         nowPlayingPath = playThis;
@@ -93,45 +90,41 @@ public class PlainPlayer implements Player {
     }
 
     @Override
-    public PlayingStatusBean getStatus() throws PlayerException {
+    public PlayingStatusBean getStatus() {
 	Integer songLength = 182;
 	Long elapsedSeconds = (System.currentTimeMillis()-songStartTime)/1000; //A hack.
         return new PlayingStatusBean(nowPlayingPath, volume, isPlaying, songLength, elapsedSeconds);   //TODO. Use something nicer than the path.
     }
 
     @Override
-    public PlayingStatusBean volume(int volume) throws PlayerException {
+    public PlayingStatusBean volume(int volume) {
         this.volume = Math.min(100, Math.max(0,volume));
         System.out.println("Set volume to "+this.volume);
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean pause() throws PlayerException {
+    public PlayingStatusBean pause() {
         isPlaying = !isPlaying;
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean stop() throws PlayerException {
+    public PlayingStatusBean stop() {
         isPlaying = false;
         return getStatus();
     }
 
     @Override
-    public void listenForChanges(final PlayerListener listener) throws PlayerException {
+    public void listenForChanges(final PlayerListener listener) {
         // Send made-up changes every now and again.
         new Thread(new Runnable() {
             public void run() {
                 while (true) {
                     try {
                         Thread.sleep(3000);
-                        try {
-                            volume++;
-                            listener.onChange(getStatus());
-                        } catch (PlayerException e) {
-                            e.printStackTrace();
-                        }
+                        volume++;
+                        listener.onChange(getStatus());
                     } catch (InterruptedException e) {
                     }
                 }
@@ -139,23 +132,23 @@ public class PlainPlayer implements Player {
         }).start();
     }
 
-    public PlayingStatusBean next() throws PlayerException {
+    public PlayingStatusBean next() {
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean previous() throws PlayerException {
+    public PlayingStatusBean previous() {
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean play() throws PlayerException {
+    public PlayingStatusBean play() {
         isPlaying = true;
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean seek(int positionInSeconds) throws PlayerException {
+    public PlayingStatusBean seek(int positionInSeconds) {
         songStartTime = System.currentTimeMillis()-(positionInSeconds*1000);
         return getStatus();
     }

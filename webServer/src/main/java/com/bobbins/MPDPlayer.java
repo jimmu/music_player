@@ -2,28 +2,23 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
-import org.bff.javampd.MPD;
-import org.bff.javampd.events.PlayerBasicChangeListener;
-import org.bff.javampd.events.PlaylistBasicChangeListener;
-import org.bff.javampd.events.PlayerBasicChangeEvent;
-import org.bff.javampd.events.PlaylistBasicChangeEvent;
-import org.bff.javampd.exception.MPDConnectionException;
-import org.bff.javampd.exception.MPDDatabaseException;
-import org.bff.javampd.exception.MPDPlayerException;
-import org.bff.javampd.exception.MPDPlaylistException;
-import org.bff.javampd.objects.MPDArtist;
-import org.bff.javampd.objects.MPDAlbum;
-import org.bff.javampd.objects.MPDSong;
-import static org.bff.javampd.Player.Status.STATUS_PLAYING;
-import static org.bff.javampd.Player.Status.STATUS_PAUSED;
+import org.bff.javampd.server.MPD;
+import org.bff.javampd.player.PlayerBasicChangeListener;
+import org.bff.javampd.playlist.PlaylistBasicChangeListener;
+import org.bff.javampd.player.PlayerBasicChangeEvent;
+import org.bff.javampd.playlist.PlaylistBasicChangeEvent;
+import org.bff.javampd.server.MPDConnectionException;
+import org.bff.javampd.artist.MPDArtist;
+import org.bff.javampd.album.MPDAlbum;
+import org.bff.javampd.song.MPDSong;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by james on 26/03/2016.
- */
+import static org.bff.javampd.player.Player.Status.STATUS_PAUSED;
+import static org.bff.javampd.player.Player.Status.STATUS_PLAYING;
+
 public class MPDPlayer implements Player {
 
     private MPD mpd;
@@ -33,151 +28,102 @@ public class MPDPlayer implements Player {
     }
 
     @Override
-    public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException {
+    public List<FilesystemEntryBean> list(String artist, String album) {
         List<FilesystemEntryBean> files = new ArrayList<>();
-        try{
-            if (artist == null || artist.isEmpty()){
-                for (MPDArtist thisArtist: mpd.getDatabase().listAllArtists()){
-                    files.add(new FilesystemEntryBean(thisArtist.getName(), null, null));
-                }
-            }
-            else {
-                if (album == null || album.isEmpty()){
-                    for (MPDAlbum thisAlbum : mpd.getDatabase().listAlbumsByArtist(new MPDArtist(artist))){
-                        files.add(new FilesystemEntryBean(artist, thisAlbum.getName(), null));
-                    }
-                }
-                else{
-                    for (MPDSong song : mpd.getDatabase().findAlbumByArtist(new MPDArtist(artist), new MPDAlbum(album))){
-                        files.add(new FilesystemEntryBean(artist, album, song.getName()));
-                    }
-                }
+        if (artist == null || artist.isEmpty()){
+            for (MPDArtist thisArtist: mpd.getMusicDatabase().getArtistDatabase().listAllArtists()){
+                files.add(new FilesystemEntryBean(thisArtist.getName(), null, null));
             }
         }
-        catch(MPDDatabaseException e){
-            throw new PlayerException(e);
+        else {
+            if (album == null || album.isEmpty()){
+                for (MPDAlbum thisAlbum : mpd.getMusicDatabase().getAlbumDatabase().listAlbumsByArtist(new MPDArtist(artist))){
+                    files.add(new FilesystemEntryBean(artist, thisAlbum.getName(), null));
+                }
+            }
+            else{
+                for (MPDSong song : mpd.getMusicDatabase().getSongDatabase().findAlbumByArtist(artist, album)){
+                    files.add(new FilesystemEntryBean(artist, album, song.getName()));
+                }
+            }
         }
         return files;
     }
 
-    public PlayingStatusBean play(String artist, String album, String song) throws PlayerException {
+    public PlayingStatusBean play(String artist, String album, String song) {
         System.out.println("Play "+artist+"/"+album+"/"+song);
-        try {
-            mpd.getPlaylist().clearPlaylist();
-            mpd.getPlaylist().addSongs(getSongs(artist, album, song));
-            mpd.getPlayer().play();
-        } catch (MPDPlaylistException | MPDDatabaseException | MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
+        mpd.getPlaylist().clearPlaylist();
+        mpd.getPlaylist().addSongs(getSongs(artist, album, song));
+        mpd.getPlayer().play();
         return getStatus();
     }
 
-    public PlayingStatusBean getStatus() throws PlayerException {
-	PlayingStatusBean status;
-	try {
-	    MPDSong currentSong = mpd.getPlayer().getCurrentSong();
-	    String songName = (currentSong == null? "-- Nothing playing --" : currentSong.getName()); // Album and Artist also available here.
-	    int volume = mpd.getPlayer().getVolume();
-        org.bff.javampd.Player.Status playerStatus = mpd.getPlayer().getStatus();
+    public PlayingStatusBean getStatus() {
+        PlayingStatusBean status;
+        MPDSong currentSong = mpd.getPlayer().getCurrentSong();
+        String songName = (currentSong == null? "-- Nothing playing --" : currentSong.getName()); // Album and Artist also available here.
+        int volume = mpd.getPlayer().getVolume();
+        org.bff.javampd.player.Player.Status playerStatus = mpd.getPlayer().getStatus();
         Boolean isPlaying = STATUS_PLAYING.equals(playerStatus);
- 	    Integer songLength = (currentSong == null? 60*60-1: currentSong.getLength());
+        Integer songLength = (currentSong == null? 60*60-1: currentSong.getLength());
         Long elapsedSeconds = mpd.getPlayer().getElapsedTime();
         status = new PlayingStatusBean(songName, volume, isPlaying, songLength, elapsedSeconds);
-        } catch (MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
+
         return status;
     }
 
-    public PlayingStatusBean volume(int volume) throws PlayerException {
+    public PlayingStatusBean volume(int volume) {
         int limitedVolume = Math.min(100, Math.max(0,volume));
-        try {
-            mpd.getPlayer().setVolume(limitedVolume);
-        } catch (MPDPlayerException e) {
-            throw new PlayerException(e);
-        }
+        mpd.getPlayer().setVolume(limitedVolume);
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean pause() throws PlayerException {
-        try {
-            org.bff.javampd.Player.Status playerStatus = mpd.getPlayer().getStatus();
-            if (STATUS_PAUSED.equals(playerStatus)){
-                mpd.getPlayer().play();
-            }
-            else if (STATUS_PLAYING.equals(playerStatus)){
-                mpd.getPlayer().pause();
-            }
-        } catch (MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
-        return getStatus();
-    }
-
-    @Override
-    public PlayingStatusBean stop() throws PlayerException {
-        try {
-            mpd.getPlayer().stop();
-        } catch (MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
-        return getStatus();
-    }
-
-    @Override
-    public PlayingStatusBean next() throws PlayerException {
-        try {
-            mpd.getPlayer().playNext();
-        } catch (MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
-        return getStatus();
-    }
-
-    @Override
-    public PlayingStatusBean previous() throws PlayerException {
-        try {
-            mpd.getPlayer().playPrev();
-        } catch (MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
-        return getStatus();
-    }
-
-    @Override
-    public PlayingStatusBean play() throws PlayerException {
-        try {
+    public PlayingStatusBean pause() {
+        org.bff.javampd.player.Player.Status playerStatus = mpd.getPlayer().getStatus();
+        if (STATUS_PAUSED.equals(playerStatus)){
             mpd.getPlayer().play();
-        } catch (MPDPlayerException e) {
-            e.printStackTrace();
-            throw new PlayerException(e);
+        }
+        else if (STATUS_PLAYING.equals(playerStatus)){
+            mpd.getPlayer().pause();
         }
         return getStatus();
     }
 
     @Override
-    public PlayingStatusBean seek(int positionInSeconds) throws PlayerException {
-        try{
-            mpd.getPlayer().seek(positionInSeconds);
-        }
-        catch (MPDPlayerException e){
-            e.printStackTrace();
-            throw new PlayerException(e);
-        }
+    public PlayingStatusBean stop() {
+        mpd.getPlayer().stop();
         return getStatus();
     }
 
-    private List<MPDSong> getSongs(String artist, String album, String song) throws MPDDatabaseException {
+    @Override
+    public PlayingStatusBean next() {
+        mpd.getPlayer().playNext();
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean previous() {
+        mpd.getPlayer().playPrevious();
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean play() {
+        mpd.getPlayer().play();
+        return getStatus();
+    }
+
+    @Override
+    public PlayingStatusBean seek(int positionInSeconds) {
+        mpd.getPlayer().seek(positionInSeconds);
+        return getStatus();
+    }
+
+    private List<MPDSong> getSongs(String artist, String album, String song) {
         List<MPDSong> songs = new ArrayList<>();
         if (artist != null && album != null && !artist.trim().isEmpty() && !album.trim().isEmpty()) {
-            Collection<MPDSong> allSongs = mpd.getDatabase().findAlbumByArtist(new MPDArtist(artist), new MPDAlbum(album));
+            Collection<MPDSong> allSongs = mpd.getMusicDatabase().getSongDatabase().findAlbumByArtist(artist, album);
             if (song == null || song.trim().isEmpty()) {
                 songs.addAll(allSongs);
             }
@@ -192,49 +138,39 @@ public class MPDPlayer implements Player {
         return songs;
     }
 
-    public void listenForChanges(final PlayerListener listener) throws PlayerException {
-	//Register ourselves with MPD for event changes and then pass those on.
-	mpd.getMonitor().addPlayerChangeListener(new PlayerBasicChangeListener(){
-	    public void playerBasicChange(PlayerBasicChangeEvent event){
-		System.out.println("MPD Player change event fired. "+event);
-		//Do we care about the content of the event?
-		try{
-		    listener.onChange(getStatus());
-		}
-		catch (PlayerException e){
-		    System.out.println("Problem during player change listener. "+e);
-		}
-	    }
-	});
+    public void listenForChanges(final PlayerListener listener) {
+        //Register ourselves with MPD for event changes and then pass those on.
+        mpd.getMonitor().addPlayerChangeListener(new PlayerBasicChangeListener(){
+            public void playerBasicChange(PlayerBasicChangeEvent event){
+            System.out.println("MPD Player change event fired. "+event);
+            //Do we care about the content of the event?
+            listener.onChange(getStatus());
+            }
+        });
 
-	mpd.getMonitor().addPlaylistChangeListener(new PlaylistBasicChangeListener(){
-	    public void playlistBasicChange(PlaylistBasicChangeEvent event){
-		System.out.println("MPD Player change event fired. "+event);
-		//Do we care about the content of the event?
-		try{
-		    listener.onChange(getStatus());
-		}
-		catch (PlayerException e){
-		    System.out.println("Problem during player change listener. "+e);
-		}
-	    }
-	});
-	mpd.getMonitor().start();
-	
-	/*
-	mpd.getPlayer().addPlayerChangeListener(new PlayerChangeListener(){
- 	    // Do these fire automatically? Or only when manually fired by the javampd API?
-	    public void playerChanged(PlayerChangeEvent event){
-		System.out.println("MPD Player change event fired. "+event);
-		//Do we care about the content of the event?
-		try{
-		    listener.onChange(getStatus());
-		}
-		catch (PlayerException e){
-		    System.out.println("Problem during player change listener. "+e);
-		}
-	    }
-	});
-	*/
+        mpd.getMonitor().addPlaylistChangeListener(new PlaylistBasicChangeListener(){
+            public void playlistBasicChange(PlaylistBasicChangeEvent event){
+            System.out.println("MPD Player change event fired. "+event);
+            //Do we care about the content of the event?
+            listener.onChange(getStatus());
+            }
+        });
+        mpd.getMonitor().start();
+
+        /*
+        mpd.getPlayer().addPlayerChangeListener(new PlayerChangeListener(){
+            // Do these fire automatically? Or only when manually fired by the javampd API?
+            public void playerChanged(PlayerChangeEvent event){
+            System.out.println("MPD Player change event fired. "+event);
+            //Do we care about the content of the event?
+            try{
+                listener.onChange(getStatus());
+            }
+            catch (PlayerException e){
+                System.out.println("Problem during player change listener. "+e);
+            }
+            }
+        });
+        */
     }
 }

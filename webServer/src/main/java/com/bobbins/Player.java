@@ -10,16 +10,16 @@ import java.util.List;
  */
 public interface Player {
 
-    public List<FilesystemEntryBean> list(String artist, String album) throws PlayerException;
+    List<FilesystemEntryBean> list(String artist, String album) ;
 
-    public PlayingStatusBean play(String artist, String album, String song) throws PlayerException;
-    public PlayingStatusBean getStatus() throws PlayerException;
-    public PlayingStatusBean volume(int volume) throws PlayerException;
-    public PlayingStatusBean pause() throws PlayerException;
-    public PlayingStatusBean stop() throws PlayerException;
-    public void listenForChanges(PlayerListener listener) throws PlayerException;
-    public PlayingStatusBean next() throws PlayerException;
-    public PlayingStatusBean previous() throws PlayerException;
-    public PlayingStatusBean play() throws PlayerException;
-    public PlayingStatusBean seek(int positionInSeconds) throws PlayerException;
+    PlayingStatusBean play(String artist, String album, String song) ;
+    PlayingStatusBean getStatus() ;
+    PlayingStatusBean volume(int volume) ;
+    PlayingStatusBean pause() ;
+    PlayingStatusBean stop() ;
+    void listenForChanges(PlayerListener listener) ;
+    PlayingStatusBean next() ;
+    PlayingStatusBean previous() ;
+    PlayingStatusBean play() ;
+    PlayingStatusBean seek(int positionInSeconds) ;
 }
