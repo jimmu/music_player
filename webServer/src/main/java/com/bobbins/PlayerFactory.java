@@ -1,7 +1,5 @@
 package com.bobbins;
 
-import org.bff.javampd.exception.MPDConnectionException;
-
 /**
  * Created by james on 26/03/2016.
  */
