@@ -2,10 +2,9 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+import org.bff.javampd.player.*;
 import org.bff.javampd.server.MPD;
-import org.bff.javampd.player.PlayerBasicChangeListener;
 import org.bff.javampd.playlist.PlaylistBasicChangeListener;
-import org.bff.javampd.player.PlayerBasicChangeEvent;
 import org.bff.javampd.playlist.PlaylistBasicChangeEvent;
 import org.bff.javampd.server.MPDConnectionException;
 import org.bff.javampd.artist.MPDArtist;
@@ -142,35 +141,29 @@ public class MPDPlayer implements Player {
         //Register ourselves with MPD for event changes and then pass those on.
         mpd.getMonitor().addPlayerChangeListener(new PlayerBasicChangeListener(){
             public void playerBasicChange(PlayerBasicChangeEvent event){
-            System.out.println("MPD Player change event fired. "+event);
-            //Do we care about the content of the event?
-            listener.onChange(getStatus());
+                //Do we care about the content of the event?
+                listener.onChange(getStatus());
             }
         });
 
         mpd.getMonitor().addPlaylistChangeListener(new PlaylistBasicChangeListener(){
             public void playlistBasicChange(PlaylistBasicChangeEvent event){
-            System.out.println("MPD Player change event fired. "+event);
-            //Do we care about the content of the event?
-            listener.onChange(getStatus());
+                //Do we care about the content of the event?
+                listener.onChange(getStatus());
+            }
+        });
+        mpd.getMonitor().addTrackPositionChangeListener(new TrackPositionChangeListener() {
+            @Override
+            public void trackPositionChanged(TrackPositionChangeEvent trackPositionChangeEvent) {
+                listener.onChange(getStatus());
+            }
+        });
+        mpd.getMonitor().addVolumeChangeListener(new VolumeChangeListener() {
+            @Override
+            public void volumeChanged(VolumeChangeEvent volumeChangeEvent) {
+                listener.onChange(getStatus());
             }
         });
         mpd.getMonitor().start();
-
-        /*
-        mpd.getPlayer().addPlayerChangeListener(new PlayerChangeListener(){
-            // Do these fire automatically? Or only when manually fired by the javampd API?
-            public void playerChanged(PlayerChangeEvent event){
-            System.out.println("MPD Player change event fired. "+event);
-            //Do we care about the content of the event?
-            try{
-                listener.onChange(getStatus());
-            }
-            catch (PlayerException e){
-                System.out.println("Problem during player change listener. "+e);
-            }
-            }
-        });
-        */
     }
 }
