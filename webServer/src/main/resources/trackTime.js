@@ -17,26 +17,22 @@ function(d3, timeFormat, progressBar) {
 		  .height(16);
 
           var timeSection = d3.select(this);
-	  timeSection.call(barRenderer);
+          timeSection.call(barRenderer);
 
-	  //TODO - Make this update/enter stuff a bit cleaner.
           var clocks = timeSection.selectAll("span");
           if (clocks.empty()){
             timeSection.insert("span", ":first-child").classed("elapsedTime", true)
-		.text(function(d){return timeFormat(d.elapsedTime)});
+            .text(function(d){return timeFormat(d.elapsedTime)});
 
             timeSection.append("span").classed("trackLength", true)
-		.text(function(d){return timeFormat(Math.max(0, data.songLength-data.elapsedTime))});
+            .text(function(d){return timeFormat(Math.max(0, data.songLength-data.elapsedTime))});
           }
           else {
             clocks.data([{"time": data.elapsedTime},
                          {"time": Math.max(0, data.songLength-data.elapsedTime)}])
-	    .text(function(d){return timeFormat(d.time)});
+                  .text(function(d){return timeFormat(d.time)});
           }
-
-
-          });
-      };
-
-      return renderTrackTime;
+      });
+  };
+  return renderTrackTime;
 });

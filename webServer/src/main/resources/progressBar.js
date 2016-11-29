@@ -27,28 +27,8 @@ function(d3) {
             if (svg.empty()){
 		svg = barSection.append("svg").attr("width", barWidth).attr("height", barHeight);
 	    }
-            var value = valueGetter(dat);
-            var filledWidth = Math.min(barWidth, barWidth*value/barMaxValue);
-	    var unfilledWidth = barWidth-filledWidth;
-	    var rectangles=[
-			{"x":0, "y":0, "width":filledWidth, "height":barHeight, "class":filledBarClass}
-			,{"x":filledWidth, "y":0, "width":unfilledWidth, "height":barHeight, "class":unfilledBarClass}
-			,{"x":0, "y":0, "width":100, "height":barHeight, events:"all", fill:"none"}
-			];
-	    var rects=svg.selectAll("rect").data(rectangles);
-            rects.enter().append("rect") //.merge(rects)
-            .attr("x", function(d){return d.x})
-            .attr("y", function(d){return d.y})
-            .attr("width", function(d){return d.width})
-            .attr("height", function(d){return d.height})
-            .attr("class", function(d){return d.class})
-            .attr("width", function(d){return d.x})
-            .attr("fill", function(d){return d.fill})
-            .attr("pointer-events", function(d){return d.events})
-            .on("click", function(d){barClicked(d, urlGetter(dat))});
-
-	    rects.attr("width", function(d){return d.width})  //The update set. This is working!
-    		 .attr("x", function(d){return d.x});
+        var value = valueGetter(dat);
+        drawTheBars(value);
 
 	     function barClicked(d, url){
             var clickEvent = d3.event;
@@ -65,8 +45,34 @@ function(d3) {
                 originalSelection.datum(json);
                 renderBar(originalSelection);
             });
+            //Re-render the bars immediately, so the gui feels responsive.
+            //(The server call above is happening asynchronously.)
+            drawTheBars(clickedValue);
 		  };
 
+          function drawTheBars(value){
+            var filledWidth = Math.min(barWidth, barWidth*value/barMaxValue);
+            var unfilledWidth = barWidth-filledWidth;
+            var rectangles=[
+                {"x":0, "y":0, "width":filledWidth, "height":barHeight, "class":filledBarClass}
+                ,{"x":filledWidth, "y":0, "width":unfilledWidth, "height":barHeight, "class":unfilledBarClass}
+                ,{"x":0, "y":0, "width":100, "height":barHeight, events:"all", fill:"none"}
+                ];
+            var rects=svg.selectAll("rect").data(rectangles);
+                rects.enter().append("rect") //.merge(rects)
+                .attr("x", function(d){return d.x})
+                .attr("y", function(d){return d.y})
+                .attr("width", function(d){return d.width})
+                .attr("height", function(d){return d.height})
+                .attr("class", function(d){return d.class})
+                .attr("width", function(d){return d.x})
+                .attr("fill", function(d){return d.fill})
+                .attr("pointer-events", function(d){return d.events})
+                .on("click", function(d){barClicked(d, urlGetter(dat))});
+
+            rects.attr("width", function(d){return d.width})  //The update set. This is working!
+                 .attr("x", function(d){return d.x});
+          }
 	    });
 
 	}
