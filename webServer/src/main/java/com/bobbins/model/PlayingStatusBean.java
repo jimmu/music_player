@@ -29,7 +29,6 @@ public class PlayingStatusBean {
 
   public PlayingStatusBean(String name, Integer volume, Boolean isPlaying, Integer songLength, Long elapsedTime){
     this.name = name;
-    this.volume = volume;
     this.isPlaying = isPlaying;
     this.songLength = songLength;
     this.elapsedTime = elapsedTime;
@@ -40,10 +39,15 @@ public class PlayingStatusBean {
     this.nextTrackActionUrl = "play/next";
     this.previousTrackActionUrl = "play/previous";
 
-    this.volumeUpUrl="play/volume?volume="+(volume+1);
-    this.volumeDownUrl="play/volume?volume="+(volume-1);
     this.volumeUrl="play/volume?volume=";
     this.seekPositionUrl="play/seek?position=";
+    setVolume(volume);
+  }
+
+  public void setVolume(int volume){
+    this.volume=volume;
+    this.volumeUpUrl="play/volume?volume="+(volume+1);
+    this.volumeDownUrl="play/volume?volume="+(volume-1);
   }
 
   @Override

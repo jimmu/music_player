@@ -74,6 +74,9 @@ public class MPDPlayer implements Player {
     public PlayingStatusBean volume(int volume) {
         int limitedVolume = Math.min(100, Math.max(0,volume));
         mpd.getPlayer().setVolume(limitedVolume);
+        PlayingStatusBean status = getStatus();
+        // The mpd player may take a moment to set the volume, so return the _expected_ value here.
+        status.volume = volume;
         return getStatus();
     }
 
@@ -116,7 +119,10 @@ public class MPDPlayer implements Player {
     @Override
     public PlayingStatusBean seek(int positionInSeconds) {
         mpd.getPlayer().seek(positionInSeconds);
-        return getStatus();
+        // The mpd player may take a moment to seek, so return the _expected_ value here.
+        PlayingStatusBean status = getStatus();
+        status.elapsedTime = (long)positionInSeconds;
+        return status;
     }
 
     private List<MPDSong> getSongs(String artist, String album, String song) {
