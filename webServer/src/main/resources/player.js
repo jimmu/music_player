@@ -38,7 +38,11 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
       }
 
       function setupEventListener(){
+          console.log("About to setup the event listener");
           var source = new EventSource("play/events");
+          source.onError = function(e){
+            console.log("Error in event source "+e);
+          }
           source.addEventListener('player-state-change', function(event){
               var json = JSON.parse(event.data);
               drawTopSection(json);

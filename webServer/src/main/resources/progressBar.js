@@ -37,32 +37,35 @@ function(d3) {
 			];
 	    var rects=svg.selectAll("rect").data(rectangles);
             rects.enter().append("rect") //.merge(rects)
-		.attr("x", function(d){return d.x})
-		.attr("y", function(d){return d.y})
-		.attr("width", function(d){return d.width})
-		.attr("height", function(d){return d.height})
-                .attr("class", function(d){return d.class})
-		.attr("width", function(d){return d.x})
-		.attr("fill", function(d){return d.fill})
-		.attr("pointer-events", function(d){return d.events})
-		.on("click", function(d){barClicked(d, urlGetter(dat))});
+            .attr("x", function(d){return d.x})
+            .attr("y", function(d){return d.y})
+            .attr("width", function(d){return d.width})
+            .attr("height", function(d){return d.height})
+            .attr("class", function(d){return d.class})
+            .attr("width", function(d){return d.x})
+            .attr("fill", function(d){return d.fill})
+            .attr("pointer-events", function(d){return d.events})
+            .on("click", function(d){barClicked(d, urlGetter(dat))});
+
 	    rects.attr("width", function(d){return d.width})  //The update set. This is working!
-		.attr("x", function(d){return d.x});
+    		 .attr("x", function(d){return d.x});
 
 	     function barClicked(d, url){
-				var clickEvent = d3.event;
-				var clickTarget = d3.event.target;
-				var dimensions = clickTarget.getBoundingClientRect();
-				var clickX = d.x + d3.event.clientX - dimensions.left;
-				//Now convert clickX to something in the range 0-barMaxValue
-				var clickedValue = Math.round(barMaxValue*clickX/barWidth);
-				//And now call the related URL
-				d3.json(url+clickedValue, function(error, json){
-				  if (error) return console.warn(error);
-				    originalSelection.datum(json);
-				    renderBar(originalSelection);
-				});
-			     };
+            var clickEvent = d3.event;
+            var clickTarget = d3.event.target;
+            var dimensions = clickTarget.getBoundingClientRect();
+            var clickX = d.x + d3.event.clientX - dimensions.left;
+            //Now convert clickX to something in the range 0-barMaxValue
+            //Make sure not to let any dodgy calculations cause the value to stray out of bounds.
+            var clickedValue = Math.min(barMaxValue, Math.max(0, Math.round(barMaxValue*clickX/barWidth)));
+            //And now call the related URL
+            console.log("Clicked value "+clickedValue);
+            d3.json(url+clickedValue, function(error, json){
+              if (error) return console.warn(error);
+                originalSelection.datum(json);
+                renderBar(originalSelection);
+            });
+		  };
 
 	    });
 

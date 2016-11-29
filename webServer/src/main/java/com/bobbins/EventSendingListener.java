@@ -10,6 +10,7 @@ import java.io.IOException;
 public class EventSendingListener implements PlayerListener {
 
     private static final int THROTTLE_LAG = 100;    //Don't ping the clients less than this many ms apart
+    private PlayingStatusBean lastSentState = null;
     private PlayingStatusBean latestState;
     private boolean somethingToSend;
     private boolean stop;
@@ -29,17 +30,25 @@ public class EventSendingListener implements PlayerListener {
                                 eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
                                 eventBuilder.data(PlayingStatusBean.class, latestState);
                                 final OutboundEvent event = eventBuilder.build();
-                                if (eventOutput.isClosed()) {    //TODO. Work out if/when we should close this.
+                                if (eventOutput.isClosed()) {
                                     System.out.println("Oh - the EventOutput object is closed!");
-                                    System.out.println("*NOT* writing: " + event);
+                                    System.out.println("*NOT* writing: " + event.getData());
                                 } else {
                                     eventOutput.write(event);
-                                    somethingToSend = false;
+                                    lastSentState = latestState;
                                 }
+                                somethingToSend = false;
                             }
                         } catch (IOException e) {
-                            throw new RuntimeException(
-                                    "Error when writing the event.", e);
+                            // Oh dear. May as well close the connection then.
+                            // The client may re-establish it.
+                            // Actually it seems to be better to let the (transient) error pass.
+//                            try {
+//                                System.out.println("Closing the event output due to an error");
+//                                eventOutput.close();
+//                            } catch (IOException e1) {
+//                                System.out.println("Couldn't close event output. "+e1);
+//                            }
                         }
                     }
                     try {
@@ -48,12 +57,27 @@ public class EventSendingListener implements PlayerListener {
                         //ok
                     }
                 }
+                // We're done.
+                try {
+                    System.out.println("Closing the event output because sender thread stopping");
+                    eventOutput.close();
+                } catch (IOException e) {
+                    //ok
+                }
             }
         }).start();
     }
 
     public synchronized void onChange(PlayingStatusBean state){
-        latestState = state;
-        somethingToSend = true;
+        if (state == null){
+            stop = true;
+        }
+        else {
+            // Only send data when there has really been a change.
+            if (!state.equals(lastSentState)) {
+                latestState = state;
+                somethingToSend = true;
+            }
+        }
     }
 }

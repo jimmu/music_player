@@ -4,14 +4,6 @@ function(d3, timeFormat, progressBar) {
 
       var originalSelection;
 
-      var onClickHandler = function(url){
-        d3.json(url, function(error, json){
-          if (error) return console.warn(error);
-            originalSelection.datum(json);
-            renderTrackTime(originalSelection);
-        });
-      }
-
       function renderTrackTime(selection){
         originalSelection = selection;
         selection.each(function(data,i){
