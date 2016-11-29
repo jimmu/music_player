@@ -18,11 +18,11 @@ import java.util.List;
 import static org.bff.javampd.player.Player.Status.STATUS_PAUSED;
 import static org.bff.javampd.player.Player.Status.STATUS_PLAYING;
 
-public class MPDPlayer implements Player {
+class MPDPlayer implements Player {
 
     private MPD mpd;
 
-    public MPDPlayer() throws MPDConnectionException {
+    MPDPlayer() throws MPDConnectionException {
         mpd = new MPD.Builder().build();
     }
 
@@ -65,7 +65,7 @@ public class MPDPlayer implements Player {
         org.bff.javampd.player.Player.Status playerStatus = mpd.getPlayer().getStatus();
         Boolean isPlaying = STATUS_PLAYING.equals(playerStatus);
         Integer songLength = (currentSong == null? 60*60-1: currentSong.getLength());
-        Long elapsedSeconds = mpd.getPlayer().getElapsedTime();
+        Long elapsedSeconds = (currentSong == null? 0 : mpd.getPlayer().getElapsedTime());
         status = new PlayingStatusBean(songName, volume, isPlaying, songLength, elapsedSeconds);
 
         return status;

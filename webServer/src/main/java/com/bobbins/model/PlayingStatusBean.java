@@ -10,16 +10,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class PlayingStatusBean {
 
   public String name;
-  public Integer status;
-  public String stopActionUrl;
-  public String nextTrackActionUrl;
-  public String previousTrackActionUrl;
-  public String pauseActionUrl;
-  public String playActionUrl;
+  public Integer status = 200;
+  public String stopActionUrl = "play/stop";
+  public String nextTrackActionUrl = "play/next";
+  public String previousTrackActionUrl = "play/previous";
+  public String pauseActionUrl = "play/pause";
+  public String playActionUrl = "play/play";
+  public String volumeUrl = "play/volume?volume=";
+  public String seekPositionUrl = "play/seek?position=";
   public String volumeUpUrl;
   public String volumeDownUrl;
-  public String volumeUrl;
-  public String seekPositionUrl;
   public Integer volume;
   public Boolean isPlaying;
   public Integer songLength;
@@ -32,22 +32,13 @@ public class PlayingStatusBean {
     this.isPlaying = isPlaying;
     this.songLength = songLength;
     this.elapsedTime = elapsedTime;
-    this.status = 200;
-    this.playActionUrl = "play/play";
-    this.stopActionUrl = "play/stop";
-    this.pauseActionUrl = "play/pause";
-    this.nextTrackActionUrl = "play/next";
-    this.previousTrackActionUrl = "play/previous";
-
-    this.volumeUrl="play/volume?volume=";
-    this.seekPositionUrl="play/seek?position=";
     setVolume(volume);
   }
 
   public void setVolume(int volume){
-    this.volume=volume;
-    this.volumeUpUrl="play/volume?volume="+(volume+1);
-    this.volumeDownUrl="play/volume?volume="+(volume-1);
+    this.volume = volume;
+    this.volumeUpUrl = volumeUrl+(volume+1);
+    this.volumeDownUrl = volumeUrl+(volume-1);
   }
 
   @Override
