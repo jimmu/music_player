@@ -22,6 +22,9 @@ class PlainPlayer implements Player {
 
     @Override
     public List<FilesystemEntryBean> getPlaylist(){
+        if (nowPlayingArtist == null){
+            return new ArrayList<>();
+        }
         if (nowPlayingSong != null){
             return new ArrayList<>(Collections.singletonList(new FilesystemEntryBean(nowPlayingArtist, nowPlayingAlbum, nowPlayingSong)));
         }

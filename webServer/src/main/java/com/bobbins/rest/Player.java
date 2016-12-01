@@ -6,9 +6,12 @@ import javax.ws.rs.core.MediaType;
 import com.bobbins.EventSendingListener;
 import com.bobbins.PlayerFactory;
 import com.bobbins.PlayerListener;
+import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseFeature;
+
+import java.util.List;
 
 @Path("play")
 public class Player {
