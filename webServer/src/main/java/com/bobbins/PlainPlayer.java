@@ -6,22 +6,31 @@ import com.bobbins.model.PlayingStatusBean;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 
-/**
- * Created by james on 29/03/2016.
- */
-public class PlainPlayer implements Player {
+class PlainPlayer implements Player {
     private String rootPath = null;
-    private String nowPlayingPath = null;
+    private String nowPlayingArtist;
+    private String nowPlayingAlbum;
+    private String nowPlayingSong;
     private Integer volume = 20;
     private boolean isPlaying = false;
     private long songStartTime = System.currentTimeMillis();
 
     @Override
+    public List<FilesystemEntryBean> getPlaylist(){
+        if (nowPlayingSong != null){
+            return new ArrayList<>(Collections.singletonList(new FilesystemEntryBean(nowPlayingArtist, nowPlayingAlbum, nowPlayingSong)));
+        }
+        return list(nowPlayingArtist, nowPlayingAlbum);
+    }
+
+    @Override
     public List<FilesystemEntryBean> list(String artist, String album) {
-        List<FilesystemEntryBean> files = new ArrayList<FilesystemEntryBean>();
+        List<FilesystemEntryBean> files = new ArrayList<>();
         try {
             if (rootPath == null) {
                 if (System.getProperty("os.name").toLowerCase().contains("windows")){
@@ -57,14 +66,10 @@ public class PlainPlayer implements Player {
                                 }
                             }
                         }
-			if (thisArtist == null || "".equals(thisArtist)){
-			    thisArtist = "x";
-			}
-                        FilesystemEntryBean entry = new FilesystemEntryBean(thisArtist, thisAlbum, song);
-                        entry.setName(file.getPath());
-                        entry.setListActionUrl("list/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
-                        entry.setPlayActionUrl("play/"+(song != null ? song : (thisAlbum != null ? thisAlbum : thisArtist)));
-                        files.add(entry);
+                        if (thisArtist == null || "".equals(thisArtist)){
+                            thisArtist = "x";
+                        }
+                        files.add(new FilesystemEntryBean(thisArtist, thisAlbum, song));
                     }
                     catch (PatternSyntaxException e){
                         System.out.println("Duff pattern in call to String.split "+e);
@@ -81,9 +86,10 @@ public class PlainPlayer implements Player {
 
     @Override
     public PlayingStatusBean play(String artist, String album, String song) {
-        String playThis = artist+":"+album+":"+song;
-        System.out.println("Play: "+playThis);
-        nowPlayingPath = playThis;
+        nowPlayingArtist = artist;
+        nowPlayingAlbum = album;
+        nowPlayingSong = song;
+        System.out.println("Play: "+artist+"/"+album+"/"+song);
         isPlaying = true;
         songStartTime = System.currentTimeMillis();
         return getStatus();
@@ -91,9 +97,10 @@ public class PlainPlayer implements Player {
 
     @Override
     public PlayingStatusBean getStatus() {
-	Integer songLength = 182;
-	Long elapsedSeconds = (System.currentTimeMillis()-songStartTime)/1000; //A hack.
-        return new PlayingStatusBean(nowPlayingPath, volume, isPlaying, songLength, elapsedSeconds);   //TODO. Use something nicer than the path.
+        Integer songLength = 182;
+        Long elapsedSeconds = (System.currentTimeMillis()-songStartTime)/1000; //A hack.
+        String name = nowPlayingArtist+"/"+nowPlayingAlbum+"/"+nowPlayingSong;
+        return new PlayingStatusBean(name, volume, isPlaying, songLength, elapsedSeconds);
     }
 
     @Override
@@ -120,14 +127,15 @@ public class PlainPlayer implements Player {
         // Send made-up changes every now and again.
         new Thread(new Runnable() {
             public void run() {
-                while (true) {
-                    try {
-                        Thread.sleep(3000);
-                        volume++;
-                        listener.onChange(getStatus());
-                    } catch (InterruptedException e) {
-                    }
+            while (true) {
+                try {
+                    Thread.sleep(3000);
+                    volume++;
+                    listener.onChange(getStatus());
+                } catch (InterruptedException e) {
+                    //ok
                 }
+            }
             }
         }).start();
     }

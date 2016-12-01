@@ -3,6 +3,7 @@ package com.bobbins;
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
 import org.bff.javampd.player.*;
+import org.bff.javampd.playlist.Playlist;
 import org.bff.javampd.server.MPD;
 import org.bff.javampd.playlist.PlaylistBasicChangeListener;
 import org.bff.javampd.playlist.PlaylistBasicChangeEvent;
@@ -24,6 +25,18 @@ class MPDPlayer implements Player {
 
     MPDPlayer() throws MPDConnectionException {
         mpd = new MPD.Builder().build();
+    }
+
+    @Override
+    public List<FilesystemEntryBean> getPlaylist(){
+        List<FilesystemEntryBean> playlist = new ArrayList<>();
+        for (MPDSong song : mpd.getPlaylist().getSongList()){
+            String artist = song.getArtistName();
+            String album = song.getAlbumName();
+            String songName = song.getName();
+            playlist.add(new FilesystemEntryBean(artist, album, songName));
+        }
+        return playlist;
     }
 
     @Override

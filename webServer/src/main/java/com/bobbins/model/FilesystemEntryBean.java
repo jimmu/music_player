@@ -28,18 +28,22 @@ public class FilesystemEntryBean {
     isSong = (song != null && !song.trim().isEmpty());
     isAlbum = !isSong && (album != null && !album.trim().isEmpty());
     isArtist = !isSong && !isAlbum && (artist != null && !artist.trim().isEmpty());
-  }
 
-  public void setListActionUrl(String url){
-    this.listActionUrl = url;
-  }
-
-  public void setPlayActionUrl(String url){
-    this.playActionUrl = url;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+    if (isArtist) {
+      playActionUrl = null;
+      listActionUrl = "list/" + artist;
+      name = artist;
+    }
+    if (isAlbum) {
+      playActionUrl = "play/" + artist + "/" + album;
+      listActionUrl = "list/" + artist + "/" + album;
+      name = album;
+    }
+    if (isSong) {
+      playActionUrl = "play/" + artist + "/" + album + "/" + song;
+      listActionUrl = null;
+      name = song;
+    }
   }
 
   public String toString(){

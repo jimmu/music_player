@@ -10,8 +10,8 @@ import java.util.List;
  */
 public interface Player {
 
+    List<FilesystemEntryBean> getPlaylist();
     List<FilesystemEntryBean> list(String artist, String album) ;
-
     PlayingStatusBean play(String artist, String album, String song) ;
     PlayingStatusBean getStatus() ;
     PlayingStatusBean volume(int volume) ;
