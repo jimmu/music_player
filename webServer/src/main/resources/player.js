@@ -16,6 +16,7 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
           drawTopSection(json);
       });
       drawBottomSection();
+      drawPlaylist();
 	  setupEventListener();
 
       function playerControl(url){
@@ -35,6 +36,21 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
       function drawBottomSection(){
           var catalogueRenderer = catalogue.onPlay(playerControl);
           d3.selectAll("#tracks").datum({"listActionUrl": "list"}).call(catalogueRenderer);
+      }
+
+      function drawPlaylist(){
+        d3.json("playlist", function(error, json){
+          if (error) return console.warn(error);
+          console.log("Playlist: "+JSON.stringify(json));
+          d3.select("#playlist")
+            .selectAll("div")
+            .data(json)
+            .enter()
+            .append("div")
+            .append("span")
+            .classed("playlistSong", true)
+            .text(function(d){return d.name});
+        });
       }
 
       function setupEventListener(){

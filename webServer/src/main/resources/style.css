@@ -8,8 +8,12 @@ div {
     width: 100%;
     background-color: white;
 }
-.musicLibraryPanel{
+.playlistPanel{
+    background-color: palegoldenrod;
     padding-top: 7em;
+}
+.musicLibraryPanel{
+    padding-top: 1em;
 }
 .artist {
     background-color: #dd6644;
