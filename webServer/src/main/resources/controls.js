@@ -25,7 +25,8 @@ function(d3, button) {
 
               buttonRenderer.path(playPath)
                             .onClick(function(d){onClickHandler(d.playActionUrl);})
-                            .classed(function(d){return "playerButton" + (d.isPlaying? "" : " playButton")});
+                            .classed(function(d){return "playerButton" + (d.isPlaying? "" : " playButton")})
+                            .width(30);
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(pausePath)
@@ -35,7 +36,8 @@ function(d3, button) {
 
               buttonRenderer.path(stopPath)
                             .onClick(function(d){onClickHandler(d.stopActionUrl)})
-                            .classed(function(d){return "playerButton" + (d.isPlaying? " stopButton" : "")});
+                            .classed(function(d){return "playerButton" + (d.isPlaying? " stopButton" : "")})
+                            .width(40);
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(ffwPath)

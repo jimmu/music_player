@@ -1,60 +1,63 @@
+body{
+    font-family: sans-serif;
+    font-size: 20px;
+    color: black;
+    background-color: white;
+    margin: 0px;
+}
 div {
     border: 1px;
-    padding-left: 12px;
 }
 .infoPanel {
     position: fixed;
     height: 6em;
     width: 100%;
     background-color: white;
+    text-align: center;
 }
+
 .playlistPanel{
     background-color: palegoldenrod;
     padding-top: 7em;
 }
 .musicLibraryPanel{
+    width: 100%;
     padding-top: 1em;
 }
 .artist {
-    background-color: #dd6644;
+    background-color: #f0f0f0;
 }
 .album {
-    background-color: #dd9944;
+    background-color: #e8e8e8;
+    padding-left: 16px;
 }
 .song {
-    background-color: #ddcc44;
+    background-color: #e0e0e0;
+    padding-left: 16px;
 }
 .playing {
-    background-color: #ddccdd;
 }
 .volumeUpDown {
-    background-color: #ccbbcc;
-}
-.pauseButton {
-    background-color: #bbaabb;
-}
-.stopButton {
-    background-color: #aa99aa;
-}
-.trackLength {
-    background-color: #998899;
-}
-.elapsedTime {
-    background-color: #887788;
 }
 .playerButton{
     stroke-width: 2;
     stroke: orange;
     fill: none;
-}
-.nextButton {
-    background-color: #998899;
-}
-.previousButton {
-    background-color: #887788;
+    Xborder: 1px solid;
 }
 .playButton {
-    background-color: #776677;
+}
+.pauseButton {
+}
+.stopButton {
+}
+.nextButton {
+}
+.previousButton {
+}
+.trackLength {
+}
+.elapsedTime {
 }
 .volumeBarFilled {
     fill: teal;

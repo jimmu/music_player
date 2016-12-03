@@ -103,6 +103,7 @@ class PlainPlayer implements Player {
         Integer songLength = 182;
         Long elapsedSeconds = (System.currentTimeMillis()-songStartTime)/1000; //A hack.
         String name = nowPlayingArtist+"/"+nowPlayingAlbum+"/"+nowPlayingSong;
+        name = (nowPlayingSong == null? "-- Nothing playing --" : name);
         return new PlayingStatusBean(name, volume, isPlaying, songLength, elapsedSeconds);
     }
 
