@@ -26,6 +26,7 @@ class PlainPlayer implements Player {
             return new ArrayList<>();
         }
         if (nowPlayingSong != null){
+            System.out.println("Returning a single song playlist.");
             return new ArrayList<>(Collections.singletonList(new FilesystemEntryBean(nowPlayingArtist, nowPlayingAlbum, nowPlayingSong)));
         }
         return list(nowPlayingArtist, nowPlayingAlbum);
@@ -103,7 +104,7 @@ class PlainPlayer implements Player {
         Integer songLength = 182;
         Long elapsedSeconds = (System.currentTimeMillis()-songStartTime)/1000; //A hack.
         String name = nowPlayingArtist+"/"+nowPlayingAlbum+"/"+nowPlayingSong;
-        name = (nowPlayingSong == null? "-- Nothing playing --" : name);
+        name = (nowPlayingArtist == null? "-- Nothing playing --" : name);
         return new PlayingStatusBean(name, volume, isPlaying, songLength, elapsedSeconds);
     }
 

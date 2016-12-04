@@ -24,6 +24,10 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
               if (error) return console.warn(error);
               drawTopSection(json);
           });
+          // This method gets called when play is clicked in the catalogue section.
+          // And when controls are clicked, so both are things that could affect the
+          // playlist or the position within it. SO redraw that now.
+          drawPlaylist();
       }
 
       function drawTopSection(json){
@@ -42,14 +46,16 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
         d3.json("playlist", function(error, json){
           if (error) return console.warn(error);
           console.log("Playlist: "+JSON.stringify(json));
-          d3.select("#playlist")
+          var plist = d3.select("#playlist")
             .selectAll("div")
-            .data(json)
-            .enter()
+            .data(json);
+          plist.enter()
             .append("div")
             .append("span")
             .classed("playlistSong", true)
             .text(function(d){return d.name});
+          plist.text(function(d){return d.name});   // The update section.
+          plist.exit().remove();
         });
       }
 
