@@ -4,6 +4,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.bobbins.EventSendingListener;
+import com.bobbins.Player;
 import com.bobbins.PlayerFactory;
 import com.bobbins.PlayerListener;
 import com.bobbins.model.FilesystemEntryBean;
@@ -15,6 +16,16 @@ import java.util.List;
 
 @Path("play")
 public class Player {
+
+    private com.bobbins.Player player;
+
+    public Player(){
+      this(PlayerFactory.getPlayer());
+    }
+
+    public Player(com.bobbins.Player player){
+      this.player = player;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -37,42 +48,42 @@ public class Player {
     public PlayingStatusBean play(@PathParam("artist") String artist,
                                   @PathParam("album") String album,
                                   @PathParam("song") String song){
-        return PlayerFactory.getPlayer().play(artist, album, song);
+        return player.play(artist, album, song);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("status")
     public PlayingStatusBean status() {
-        return PlayerFactory.getPlayer().getStatus();
+        return player.getStatus();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("volume")
     public PlayingStatusBean quieter(@QueryParam("volume") Integer volume) {
-        return PlayerFactory.getPlayer().volume(volume);
+        return player.volume(volume);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("seek")
     public PlayingStatusBean seek(@QueryParam("position") Integer positionInSeconds) {
-        return PlayerFactory.getPlayer().seek(positionInSeconds);
+        return player.seek(positionInSeconds);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("pause")
     public PlayingStatusBean pause() {
-        return PlayerFactory.getPlayer().pause();
+        return player.pause();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("stop")
     public PlayingStatusBean stop() {
-        return PlayerFactory.getPlayer().stop();
+        return player.stop();
     }
 
     @GET
@@ -82,7 +93,7 @@ public class Player {
 	final EventOutput eventOutput = new EventOutput();
         System.out.println("**** Creating a new event sender");
         PlayerListener listener = new EventSendingListener(eventOutput);
-        PlayerFactory.getPlayer().listenForChanges(listener);
+        player.listenForChanges(listener);
         return eventOutput;
     }
 
@@ -90,20 +101,20 @@ public class Player {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("next")
     public PlayingStatusBean next() {
-        return PlayerFactory.getPlayer().next();
+        return player.next();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("previous")
     public PlayingStatusBean previous() {
-        return PlayerFactory.getPlayer().previous();
+        return player.previous();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("play")
     public PlayingStatusBean play() {
-        return PlayerFactory.getPlayer().play();
+        return player.play();
     }
 }

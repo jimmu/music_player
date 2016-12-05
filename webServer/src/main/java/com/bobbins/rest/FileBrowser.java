@@ -13,6 +13,16 @@ import java.util.List;
 @Path("list")
 public class FileBrowser {
 
+    private Player player;
+
+    public FileBrowser(){
+      this(PlayerFactory.getPlayer());
+    }
+
+    public FileBrowser(Player player){
+      this.player = player;
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<FilesystemEntryBean> rootList() {
@@ -32,7 +42,6 @@ public class FileBrowser {
     public List<FilesystemEntryBean> list(@PathParam("artist") String artist,
                                           @PathParam("album") String album) {
         System.out.println("Listing "+artist+"/"+album);
-        com.bobbins.Player player = PlayerFactory.getPlayer();
         return player.list(artist, album);
     }
 

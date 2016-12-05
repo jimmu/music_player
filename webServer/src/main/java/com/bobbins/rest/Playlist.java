@@ -1,6 +1,7 @@
 package com.bobbins.rest;
 
 import com.bobbins.PlayerFactory;
+import com.bobbins.Player;
 import com.bobbins.model.FilesystemEntryBean;
 
 import javax.ws.rs.GET;
@@ -12,9 +13,19 @@ import java.util.List;
 @Path("playlist")
 public class Playlist {
 
+    private Player player;
+
+    public Playlist(){
+      this(PlayerFactory.getPlayer());
+    }
+
+    public Playlist(Player player){
+      this.player = player;
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<FilesystemEntryBean> playlist(){
-        return PlayerFactory.getPlayer().getPlaylist();
+        return player.getPlaylist();
     }
 }
