@@ -12,17 +12,19 @@ public class EventSendingListener implements PlayerListener {
     private static final int THROTTLE_LAG = 100;    //Don't ping the clients less than this many ms apart
     private PlayingStatusBean lastSentState = null;
     private PlayingStatusBean latestState;
-    private boolean somethingToSend;
+    private List<FilesystemEntryBean> lastSentPlaylist = null;
+    private List<FilesystemEntryBean> latestPlaylist;
     private boolean stop;
 
     public EventSendingListener(final EventOutput eventOutput){
-        somethingToSend = false;
+        latestState = null;
+        latestPlaylist = null;
         stop = false;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!stop){
-                    if (somethingToSend){
+                    if (latestState != null){
                         try {
                             synchronized (this) {
                                 final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
@@ -37,7 +39,36 @@ public class EventSendingListener implements PlayerListener {
                                     eventOutput.write(event);
                                     lastSentState = latestState;
                                 }
-                                somethingToSend = false;
+                                latestState = null;
+                            }
+                        } catch (IOException e) {
+                            // Oh dear. May as well close the connection then.
+                            // The client may re-establish it.
+                            // Actually it seems to be better to let the (transient) error pass.
+//                            try {
+//                                System.out.println("Closing the event output due to an error");
+//                                eventOutput.close();
+//                            } catch (IOException e1) {
+//                                System.out.println("Couldn't close event output. "+e1);
+//                            }
+                        }
+                    }
+                    if (latestPlaylist != null){
+                        try {
+                            synchronized (this) {
+                                final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
+                                eventBuilder.name("playlist-change");
+                                eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
+                                eventBuilder.data(List<FilesystemEntryBean>, latestPlaylist);
+                                final OutboundEvent event = eventBuilder.build();
+                                if (eventOutput.isClosed()) {
+                                    System.out.println("Oh - the EventOutput object is closed!");
+                                    System.out.println("*NOT* writing: " + event.getData());
+                                } else {
+                                    eventOutput.write(event);
+                                    lastSentPlaylist = latestPlaylist;
+                                }
+                                latestPlaylist = null;
                             }
                         } catch (IOException e) {
                             // Oh dear. May as well close the connection then.
@@ -76,8 +107,14 @@ public class EventSendingListener implements PlayerListener {
             // Only send data when there has really been a change.
             if (!state.equals(lastSentState)) {
                 latestState = state;
-                somethingToSend = true;
             }
+        }
+    }
+
+    public void onPlaylistChange(List<FilesystemEntryBean> playlist){
+	if (playlist != null){
+	    //TODO. only send data when there's a real change
+            latestPlaylist = playlist;
         }
     }
 }

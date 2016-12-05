@@ -168,7 +168,7 @@ class MPDPlayer implements Player {
         mpd.getMonitor().addPlaylistChangeListener(new PlaylistBasicChangeListener(){
             public void playlistBasicChange(PlaylistBasicChangeEvent event){
                 //Do we care about the content of the event?
-                listener.onChange(getStatus());
+                listener.onPlaylistChange(getPlaylist());
             }
         });
         mpd.getMonitor().addTrackPositionChangeListener(new TrackPositionChangeListener() {

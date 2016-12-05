@@ -45,10 +45,15 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
       function drawPlaylist(){
         d3.json("playlist", function(error, json){
           if (error) return console.warn(error);
-          console.log("Playlist: "+JSON.stringify(json));
+	  renderPlaylist(json);
+        });
+      }
+
+      function renderPlaylist(listData){
+          console.log("Playlist: "+JSON.stringify(listData));
           var plist = d3.select("#playlist")
             .selectAll("div")
-            .data(json);
+            .data(listData);
           plist.enter()
             .append("div")
             .append("span")
@@ -56,7 +61,6 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
             .text(function(d){return d.name});
           plist.text(function(d){return d.name});   // The update section.
           plist.exit().remove();
-        });
       }
 
       function setupEventListener(){
@@ -68,6 +72,10 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
           source.addEventListener('player-state-change', function(event){
               var json = JSON.parse(event.data);
               drawTopSection(json);
+          });
+          source.addEventListener('playlist-change', function(event){
+              var json = JSON.parse(event.data);
+              renderPlaylist(json);
           });
       }
   }
