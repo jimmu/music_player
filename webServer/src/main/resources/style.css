@@ -24,6 +24,16 @@ div {
     width: 100%;
     padding-top: 1em;
 }
+.currentTrack{
+    background-color: orange;
+}
+.pastTrack{
+    background-color: gray;
+}
+.futureTrack{
+    background-color: yellow;
+}
+
 .artist {
     background-color: #f0f0f0;
 }

@@ -51,6 +51,7 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
 
       function renderPlaylist(listData){
           console.log("Playlist: "+JSON.stringify(listData));
+          var currentTrackIndex = listData.currentTrackNumber;
           var plist = d3.select("#playlist")
             .selectAll("div")
             .data(listData.trackList);
@@ -58,6 +59,9 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
             .append("div")
             .append("span")
             .classed("playlistSong", true)
+            .classed("currentTack", function(d,i){return i==currentTrackIndex})
+            .classed("futureTack", function(d,i){return i>currentTrackIndex})
+            .classed("pastTack", function(d,i){return i<currentTrackIndex})
             .text(function(d){return d.name});
           plist.text(function(d){return d.name});   // The update section.
           plist.exit().remove();
