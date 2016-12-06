@@ -3,7 +3,6 @@ package com.bobbins;
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
 import org.bff.javampd.player.*;
-import org.bff.javampd.playlist.Playlist;
 import org.bff.javampd.server.MPD;
 import org.bff.javampd.playlist.PlaylistBasicChangeListener;
 import org.bff.javampd.playlist.PlaylistBasicChangeEvent;
@@ -21,6 +20,7 @@ import static org.bff.javampd.player.Player.Status.STATUS_PLAYING;
 
 class MPDPlayer implements Player {
 
+    private static final long COMMAND_COMPLETION_DELAY = 50;
     private MPD mpd;
 
     MPDPlayer() throws MPDConnectionException {
@@ -67,6 +67,7 @@ class MPDPlayer implements Player {
         mpd.getPlaylist().clearPlaylist();
         mpd.getPlaylist().addSongs(getSongs(artist, album, song));
         mpd.getPlayer().play();
+        waitForCommand();
         return getStatus();
     }
 
@@ -80,16 +81,13 @@ class MPDPlayer implements Player {
         Integer songLength = (currentSong == null? 60*60-1: currentSong.getLength());
         Long elapsedSeconds = (currentSong == null? 0 : mpd.getPlayer().getElapsedTime());
         status = new PlayingStatusBean(songName, volume, isPlaying, songLength, elapsedSeconds);
-
         return status;
     }
 
     public PlayingStatusBean volume(int volume) {
         int limitedVolume = Math.min(100, Math.max(0,volume));
         mpd.getPlayer().setVolume(limitedVolume);
-        PlayingStatusBean status = getStatus();
-        // The mpd player may take a moment to set the volume, so return the _expected_ value here.
-        status.volume = volume;
+        waitForCommand();
         return getStatus();
     }
 
@@ -102,40 +100,43 @@ class MPDPlayer implements Player {
         else if (STATUS_PLAYING.equals(playerStatus)){
             mpd.getPlayer().pause();
         }
+        waitForCommand();
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean stop() {
         mpd.getPlayer().stop();
+        waitForCommand();
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean next() {
         mpd.getPlayer().playNext();
+        waitForCommand();
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean previous() {
         mpd.getPlayer().playPrevious();
+        waitForCommand();
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean play() {
         mpd.getPlayer().play();
+        waitForCommand();
         return getStatus();
     }
 
     @Override
     public PlayingStatusBean seek(int positionInSeconds) {
         mpd.getPlayer().seek(positionInSeconds);
-        // The mpd player may take a moment to seek, so return the _expected_ value here.
-        PlayingStatusBean status = getStatus();
-        status.elapsedTime = (long)positionInSeconds;
-        return status;
+        waitForCommand();
+        return getStatus();
     }
 
     private List<MPDSong> getSongs(String artist, String album, String song) {
@@ -184,5 +185,14 @@ class MPDPlayer implements Player {
             }
         });
         mpd.getMonitor().start();
+    }
+
+    private void waitForCommand(){
+        try{
+            Thread.sleep(COMMAND_COMPLETION_DELAY);
+        }
+        catch(InterruptedException e){
+            //ok
+        }
     }
 }
