@@ -1,11 +1,15 @@
 package com.bobbins;
 
+import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+import com.google.common.reflect.TypeToken;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
 
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class EventSendingListener implements PlayerListener {
 
@@ -59,7 +63,9 @@ public class EventSendingListener implements PlayerListener {
                                 final OutboundEvent.Builder eventBuilder = new OutboundEvent.Builder();
                                 eventBuilder.name("playlist-change");
                                 eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
-                                eventBuilder.data(List<FilesystemEntryBean>, latestPlaylist);
+                                Type listType = new TypeToken<List<FilesystemEntryBean>>(){}.getType();
+                                eventBuilder.data(latestPlaylist.getClass(), latestPlaylist);
+                                //eventBuilder.data(listType, latestPlaylist);
                                 final OutboundEvent event = eventBuilder.build();
                                 if (eventOutput.isClosed()) {
                                     System.out.println("Oh - the EventOutput object is closed!");
@@ -111,6 +117,7 @@ public class EventSendingListener implements PlayerListener {
         }
     }
 
+    @Override
     public void onPlaylistChange(List<FilesystemEntryBean> playlist){
 	if (playlist != null){
 	    //TODO. only send data when there's a real change

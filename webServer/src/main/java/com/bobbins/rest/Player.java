@@ -4,7 +4,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.bobbins.EventSendingListener;
-import com.bobbins.Player;
 import com.bobbins.PlayerFactory;
 import com.bobbins.PlayerListener;
 import com.bobbins.model.FilesystemEntryBean;

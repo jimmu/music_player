@@ -13,13 +13,13 @@ import java.util.List;
 @Path("list")
 public class FileBrowser {
 
-    private Player player;
+    private com.bobbins.Player player;
 
     public FileBrowser(){
       this(PlayerFactory.getPlayer());
     }
 
-    public FileBrowser(Player player){
+    public FileBrowser(com.bobbins.Player player){
       this.player = player;
     }
 

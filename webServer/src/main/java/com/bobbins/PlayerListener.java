@@ -1,6 +1,9 @@
 package com.bobbins;
 
+import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+
+import java.util.List;
 
 public interface PlayerListener {
 
