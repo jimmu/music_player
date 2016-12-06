@@ -17,7 +17,6 @@ div {
 }
 
 .playlistPanel{
-    background-color: palegoldenrod;
     padding-top: 7em;
 }
 .musicLibraryPanel{
@@ -74,6 +73,9 @@ div {
 .trackLength {
 }
 .elapsedTime {
+}
+.barHandle{
+  fill: black;
 }
 .volumeBarFilled {
     fill: teal;

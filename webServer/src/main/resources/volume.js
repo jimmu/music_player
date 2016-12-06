@@ -19,7 +19,7 @@ function(d3, progressBar) {
 			  .getUrl(function(d){return d.volumeUrl})
 			  .classFilledBar("volumeBarFilled")
 			  .classUnfilledBar("volumeBarUnfilled")
-			  .width(150)
+			  .width(250)
 			  .height(16);
 			  
 	originalSelection = selection;

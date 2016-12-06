@@ -13,7 +13,7 @@ function(d3, timeFormat, progressBar) {
 		  .getUrl(function(d){return d.seekPositionUrl})
 		  .classFilledBar("trackTimeBarFilled")
 		  .classUnfilledBar("trackTimeBarUnfilled")
-		  .width(100)
+		  .width(200)
 		  .height(16);
 
           var timeSection = d3.select(this);

@@ -16,8 +16,11 @@ function(d3, button) {
               var stopPath  = "M 5  5  L 25 5  L 25 25 L 5 25 L 5 5";
               var pausePath = "M 5  5  L 5 25  M 10 25 L 10 5";
 
-              var buttonRenderer = button.width(40)
-                                         .height(30);
+              var wideButtonWidth = 80;
+              var narrowButtonWidth = 60;
+              var buttonHeight = 30;
+              var buttonRenderer = button.width(wideButtonWidth)
+                                         .height(buttonHeight);
               buttonRenderer.path(rwPath)
                             .onClick(function(d){onClickHandler(d.previousTrackActionUrl)})
                             .classed(function(){return "playerButton previousButton"});
@@ -26,7 +29,7 @@ function(d3, button) {
               buttonRenderer.path(playPath)
                             .onClick(function(d){onClickHandler(d.playActionUrl);})
                             .classed(function(d){return "playerButton" + (d.isPlaying? "" : " playButton")})
-                            .width(30);
+                            .width(narrowButtonWidth);
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(pausePath)
@@ -37,7 +40,7 @@ function(d3, button) {
               buttonRenderer.path(stopPath)
                             .onClick(function(d){onClickHandler(d.stopActionUrl)})
                             .classed(function(d){return "playerButton" + (d.isPlaying? " stopButton" : "")})
-                            .width(40);
+                            .width(wideButtonWidth);
               controlsSection.call(buttonRenderer);
 
               buttonRenderer.path(ffwPath)

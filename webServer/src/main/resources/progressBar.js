@@ -10,6 +10,7 @@ function(d3) {
 	var barMaxValue = 100;
 	var filledBarClass = "barFilled";
 	var unfilledBarClass = "barUnfilled";
+	var barHandleClass = "barHandle";
 
 	var valueGetter = function(d){
 		return 10;
@@ -54,9 +55,10 @@ function(d3) {
             var filledWidth = Math.min(barWidth, barWidth*value/barMaxValue);
             var unfilledWidth = barWidth-filledWidth;
             var rectangles=[
-                {"x":0, "y":0, "width":filledWidth, "height":barHeight, "class":filledBarClass}
-                ,{"x":filledWidth, "y":0, "width":unfilledWidth, "height":barHeight, "class":unfilledBarClass}
-                ,{"x":0, "y":0, "width":100, "height":barHeight, events:"all", fill:"none"}
+                {"x":0, "y":2, "width":filledWidth, "height":barHeight-4, "class":filledBarClass}
+                ,{"x":filledWidth, "y":2, "width":unfilledWidth, "height":barHeight-4, "class":unfilledBarClass}
+                ,{"x":filledWidth-2, "y":0, "width":4, "height":barHeight, "class":barHandleClass}
+                ,{"x":0, "y":2, "width":100, "height":barHeight-4, events:"all", fill:"none"}
                 ];
             var rects=svg.selectAll("rect").data(rectangles);
                 rects.enter().append("rect") //.merge(rects)
@@ -95,6 +97,11 @@ function(d3) {
 	renderBar.classUnfilledBar=function(value){
 	  if (!arguments.length) return unfilledBarClass;
 	  unfilledBarClass = value
+	  return renderBar;
+	}
+	renderBar.classBarHandle=function(value){
+	  if (!arguments.length) return barHandleClass;
+	  barHandleClass = value
 	  return renderBar;
 	}
 	renderBar.width=function(value){
