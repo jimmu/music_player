@@ -1,5 +1,8 @@
 package com.bobbins.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,4 +33,30 @@ public class PlaylistBean {
             }
         }
     }
+
+    @Override
+    public int hashCode(){
+        return new HashCodeBuilder(17,37)
+                .append(trackList)
+                .append(trackCount)
+                .append(currentTrackNumber)
+                .append(currentTrackName)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object other){
+        if (other == null){return false;}
+        if (other == this){return true;}
+        if (other.getClass() != getClass()){return false;}
+        PlaylistBean otherBean = (PlaylistBean)other;
+        return new EqualsBuilder()
+                .appendSuper(super.equals(other))
+                .append(trackList, otherBean.trackList)
+                .append(trackCount, otherBean.trackCount)
+                .append(currentTrackNumber, otherBean.currentTrackNumber)
+                .append(currentTrackName, otherBean.currentTrackName)
+                .isEquals();
+    }
+
 }

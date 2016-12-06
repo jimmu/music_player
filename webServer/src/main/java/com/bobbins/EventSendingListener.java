@@ -37,10 +37,7 @@ public class EventSendingListener implements PlayerListener {
                                 eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
                                 eventBuilder.data(PlayingStatusBean.class, latestState);
                                 final OutboundEvent event = eventBuilder.build();
-                                if (eventOutput.isClosed()) {
-                                    System.out.println("Oh - the EventOutput object is closed!");
-                                    System.out.println("*NOT* writing: " + event.getData());
-                                } else {
+                                if (!eventOutput.isClosed()) {
                                     eventOutput.write(event);
                                     lastSentState = latestState;
                                 }
@@ -68,10 +65,7 @@ public class EventSendingListener implements PlayerListener {
                                 eventBuilder.data(PlaylistBean.class, latestPlaylist);
                                 //eventBuilder.data(listType, latestPlaylist);
                                 final OutboundEvent event = eventBuilder.build();
-                                if (eventOutput.isClosed()) {
-                                    System.out.println("Oh - the EventOutput object is closed!");
-                                    System.out.println("*NOT* writing: " + event.getData());
-                                } else {
+                                if (!eventOutput.isClosed()) {
                                     eventOutput.write(event);
                                     lastSentPlaylist = latestPlaylist;
                                 }
@@ -121,8 +115,9 @@ public class EventSendingListener implements PlayerListener {
     @Override
     public void onPlaylistChange(PlaylistBean playlist){
 	    if (playlist != null){
-	        //TODO. only send data when there's a real change
-            latestPlaylist = playlist;
+	        if (!playlist.equals(lastSentPlaylist)) {
+                latestPlaylist = playlist;
+            }
         }
     }
 }
