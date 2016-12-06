@@ -1,7 +1,7 @@
 rm -f /tmp/ripcd.lock
 rm -f /tmp/cdevent
 # Start waiting for cds to rip
-/home/pi/waitforcd.sh &
+nohup /home/pi/music_player/bin/waitforcd.sh &
 
 # Start the music player
 cd /home/pi/music_player
