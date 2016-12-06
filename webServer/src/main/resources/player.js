@@ -57,16 +57,15 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
             .data(listData.trackList);
           plist.enter()
             .append("div")
-            //.append("span")
             .classed("playlistSong", true)
-            .classed("currentTack", function(d,i){return i==currentTrackIndex})
-            .classed("futureTack", function(d,i){return i>currentTrackIndex})
-            .classed("pastTack", function(d,i){return i<currentTrackIndex})
+            .classed("currentTrack", function(d,i){return i==currentTrackIndex})
+            .classed("futureTrack", function(d,i){return i>currentTrackIndex})
+            .classed("pastTrack", function(d,i){return i<currentTrackIndex})
             .text(function(d){return d.name});
           plist.text(function(d){return d.name})   // The update section.
-            .classed("currentTack", function(d,i){return i==currentTrackIndex})
-            .classed("futureTack", function(d,i){return i>currentTrackIndex})
-            .classed("pastTack", function(d,i){return i<currentTrackIndex});
+            .classed("currentTrack", function(d,i){return i==currentTrackIndex})
+            .classed("futureTrack", function(d,i){return i>currentTrackIndex})
+            .classed("pastTrack", function(d,i){return i<currentTrackIndex});
           plist.exit().remove();
       }
 

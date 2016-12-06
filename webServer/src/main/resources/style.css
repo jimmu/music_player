@@ -24,6 +24,9 @@ div {
     width: 100%;
     padding-top: 1em;
 }
+.playlistSong{
+    font-size: 24px;
+}
 .currentTrack{
     color: orange;
 }
