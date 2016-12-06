@@ -63,7 +63,10 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
             .classed("futureTack", function(d,i){return i>currentTrackIndex})
             .classed("pastTack", function(d,i){return i<currentTrackIndex})
             .text(function(d){return d.name});
-          plist.text(function(d){return d.name});   // The update section.
+          plist.text(function(d){return d.name})   // The update section.
+            .classed("currentTack", function(d,i){return i==currentTrackIndex})
+            .classed("futureTack", function(d,i){return i>currentTrackIndex})
+            .classed("pastTack", function(d,i){return i<currentTrackIndex});
           plist.exit().remove();
       }
 
