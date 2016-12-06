@@ -2,6 +2,7 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+import com.bobbins.model.PlaylistBean;
 import com.google.common.reflect.TypeToken;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
@@ -16,8 +17,8 @@ public class EventSendingListener implements PlayerListener {
     private static final int THROTTLE_LAG = 100;    //Don't ping the clients less than this many ms apart
     private PlayingStatusBean lastSentState = null;
     private PlayingStatusBean latestState;
-    private List<FilesystemEntryBean> lastSentPlaylist = null;
-    private List<FilesystemEntryBean> latestPlaylist;
+    private PlaylistBean lastSentPlaylist = null;
+    private PlaylistBean latestPlaylist;
     private boolean stop;
 
     public EventSendingListener(final EventOutput eventOutput){
@@ -64,7 +65,7 @@ public class EventSendingListener implements PlayerListener {
                                 eventBuilder.name("playlist-change");
                                 eventBuilder.mediaType(MediaType.APPLICATION_JSON_TYPE);
                                 Type listType = new TypeToken<List<FilesystemEntryBean>>(){}.getType();
-                                eventBuilder.data(latestPlaylist.getClass(), latestPlaylist);
+                                eventBuilder.data(PlaylistBean.class, latestPlaylist);
                                 //eventBuilder.data(listType, latestPlaylist);
                                 final OutboundEvent event = eventBuilder.build();
                                 if (eventOutput.isClosed()) {
@@ -118,9 +119,9 @@ public class EventSendingListener implements PlayerListener {
     }
 
     @Override
-    public void onPlaylistChange(List<FilesystemEntryBean> playlist){
-	if (playlist != null){
-	    //TODO. only send data when there's a real change
+    public void onPlaylistChange(PlaylistBean playlist){
+	    if (playlist != null){
+	        //TODO. only send data when there's a real change
             latestPlaylist = playlist;
         }
     }

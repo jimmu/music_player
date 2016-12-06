@@ -53,7 +53,7 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
           console.log("Playlist: "+JSON.stringify(listData));
           var plist = d3.select("#playlist")
             .selectAll("div")
-            .data(listData);
+            .data(listData.trackList);
           plist.enter()
             .append("div")
             .append("span")

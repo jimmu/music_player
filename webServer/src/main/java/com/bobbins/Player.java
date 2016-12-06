@@ -2,6 +2,7 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+import com.bobbins.model.PlaylistBean;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public interface Player {
 
-    List<FilesystemEntryBean> getPlaylist();
+    PlaylistBean getPlaylist();
     List<FilesystemEntryBean> list(String artist, String album) ;
     PlayingStatusBean play(String artist, String album, String song) ;
     PlayingStatusBean getStatus() ;

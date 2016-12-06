@@ -2,6 +2,7 @@ package com.bobbins;
 
 import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
+import com.bobbins.model.PlaylistBean;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,15 +22,15 @@ class PlainPlayer implements Player {
     private long songStartTime = System.currentTimeMillis();
 
     @Override
-    public List<FilesystemEntryBean> getPlaylist(){
+    public PlaylistBean getPlaylist(){
         if (nowPlayingArtist == null){
-            return new ArrayList<>();
+            return new PlaylistBean(new ArrayList<FilesystemEntryBean>(), null);
         }
         if (nowPlayingSong != null){
             System.out.println("Returning a single song playlist.");
-            return new ArrayList<>(Collections.singletonList(new FilesystemEntryBean(nowPlayingArtist, nowPlayingAlbum, nowPlayingSong)));
+            return new PlaylistBean(new ArrayList<>(Collections.singletonList(new FilesystemEntryBean(nowPlayingArtist, nowPlayingAlbum, nowPlayingSong))), getStatus().name);
         }
-        return list(nowPlayingArtist, nowPlayingAlbum);
+        return new PlaylistBean(list(nowPlayingArtist, nowPlayingAlbum), getStatus().name);
     }
 
     @Override

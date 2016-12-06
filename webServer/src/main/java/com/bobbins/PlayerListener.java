@@ -1,12 +1,10 @@
 package com.bobbins;
 
-import com.bobbins.model.FilesystemEntryBean;
 import com.bobbins.model.PlayingStatusBean;
-
-import java.util.List;
+import com.bobbins.model.PlaylistBean;
 
 public interface PlayerListener {
 
-    public void onChange(PlayingStatusBean state);
-    public void onPlaylistChange(List<FilesystemEntryBean> playlist);
+    void onChange(PlayingStatusBean state);
+    void onPlaylistChange(PlaylistBean playlist);
 }

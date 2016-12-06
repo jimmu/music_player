@@ -6,6 +6,8 @@ import javax.ws.rs.client.WebTarget;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 
+import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
+import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +24,6 @@ public class MyResourceTest {
         //server = Main.startServer();
         // create the client
         //Client c = ClientBuilder.newClient();
-
-        // uncomment the following line if you want to enable
-        // support for JSON in the client (you also have to uncomment
-        // dependency on jersey-media-json module in pom.xml and Main.startServer())
-        // --
-        // c.configuration().enable(new org.glassfish.jersey.media.json.JsonJaxbFeature());
-
         //target = c.target(Main.BASE_URI);
     }
 
@@ -45,4 +40,12 @@ public class MyResourceTest {
         //String responseMsg = target.path("myresource").request().get(String.class);
         assertEquals("Got it!", "Got it!");
     }
+
+//    @Test
+//    public void testCrap(){
+//        String response = target.path("list").request().get(String.class);
+//        System.out.println(response);
+//        response = target.path("playlist").request().get(String.class);
+//        System.out.println(response);
+//    }
 }

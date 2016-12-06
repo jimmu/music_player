@@ -11,8 +11,6 @@ import com.bobbins.model.PlayingStatusBean;
 import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.SseFeature;
 
-import java.util.List;
-
 @Path("play")
 public class Player {
 
