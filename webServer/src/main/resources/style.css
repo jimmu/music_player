@@ -29,12 +29,15 @@ div {
 }
 .currentTrack{
     color: orange;
+    font-size: 24px;
 }
 .pastTrack{
-    color: gray;
+    color: peachpuff;
+    font-size: 16px;
 }
 .futureTrack{
-    color: green;
+    color: darkorange;
+    font-size: 20px;
 }
 
 .artist {

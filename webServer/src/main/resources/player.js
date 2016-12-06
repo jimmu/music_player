@@ -4,9 +4,10 @@ define(["d3.v3.min"
         ,"track"
         ,"volume"
         ,"controls"
+        ,"playlist"
        ]
 ,
-function(d3, catalogue, trackTime, currentTrack, volume, controls) {
+function(d3, catalogue, trackTime, currentTrack, volume, controls, playlist) {
   return function(){
       controls.onClick(playerControl);
 
@@ -45,28 +46,12 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
       function drawPlaylist(){
         d3.json("playlist", function(error, json){
           if (error) return console.warn(error);
-	  renderPlaylist(json);
+	      renderPlaylist(json);
         });
       }
 
       function renderPlaylist(listData){
-          console.log("Playlist: "+JSON.stringify(listData));
-          var currentTrackIndex = listData.currentTrackNumber;
-          var plist = d3.select("#playlist")
-            .selectAll("div")
-            .data(listData.trackList);
-          plist.enter()
-            .append("div")
-            .classed("playlistSong", true)
-            .classed("currentTrack", function(d,i){return i==currentTrackIndex})
-            .classed("futureTrack", function(d,i){return i>currentTrackIndex})
-            .classed("pastTrack", function(d,i){return i<currentTrackIndex})
-            .text(function(d){return d.name});
-          plist.text(function(d){return d.name})   // The update section.
-            .classed("currentTrack", function(d,i){return i==currentTrackIndex})
-            .classed("futureTrack", function(d,i){return i>currentTrackIndex})
-            .classed("pastTrack", function(d,i){return i<currentTrackIndex});
-          plist.exit().remove();
+          d3.selectAll("#playlist").datum(listData).call(playlist);
       }
 
       function setupEventListener(){
