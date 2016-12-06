@@ -57,7 +57,7 @@ function(d3, catalogue, trackTime, currentTrack, volume, controls) {
             .data(listData.trackList);
           plist.enter()
             .append("div")
-            .append("span")
+            //.append("span")
             .classed("playlistSong", true)
             .classed("currentTack", function(d,i){return i==currentTrackIndex})
             .classed("futureTack", function(d,i){return i>currentTrackIndex})
