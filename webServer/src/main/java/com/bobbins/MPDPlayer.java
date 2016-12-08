@@ -189,6 +189,7 @@ class MPDPlayer implements Player {
         mpd.getMonitor().start();
     }
 
+    //TODO. Check if there's any benefit of this. I haven't found it yet!
     private void waitForCommand(){
         try{
             Thread.sleep(COMMAND_COMPLETION_DELAY);
