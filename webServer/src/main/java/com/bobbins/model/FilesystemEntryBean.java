@@ -5,6 +5,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class FilesystemEntryBean {
 
+  public static final String LIST_BASE_URL = "list";
+  public static final String PLAY_BASE_URL = "play";
+
   public String listActionUrl;
   public String playActionUrl;
 
@@ -18,7 +21,7 @@ public class FilesystemEntryBean {
 
   public String name;
 
-  public FilesystemEntryBean(){}
+  public FilesystemEntryBean(){}  //Zero arg constructor needed for Json stuff to work.
 
   public FilesystemEntryBean(String artist, String album, String song){
     this.artist = artist;
@@ -31,16 +34,16 @@ public class FilesystemEntryBean {
 
     if (isArtist) {
       playActionUrl = null;
-      listActionUrl = "list/" + artist;
+      listActionUrl = LIST_BASE_URL + "/" + artist;
       name = artist;
     }
     if (isAlbum) {
-      playActionUrl = "play/" + artist + "/" + album;
-      listActionUrl = "list/" + artist + "/" + album;
+      playActionUrl = PLAY_BASE_URL + "/" + artist + "/" + album;
+      listActionUrl = LIST_BASE_URL + "/" +artist + "/" + album;
       name = album;
     }
     if (isSong) {
-      playActionUrl = "play/" + artist + "/" + album + "/" + song;
+      playActionUrl = PLAY_BASE_URL + "/" + artist + "/" + album + "/" + song;
       listActionUrl = null;
       name = song;
     }

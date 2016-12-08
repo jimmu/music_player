@@ -169,6 +169,7 @@ public class PlainPlayerTest {
         player.play("artist1", "album1", "song1");
         PlaylistBean playlist = player.getPlaylist();
         assertEquals(1, playlist.trackList.size());
+        assertEquals(Integer.valueOf(1), playlist.trackCount);
         assertEquals("artist1/album1/song1", playlist.currentTrackName);
     }
 
