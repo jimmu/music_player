@@ -1,6 +1,7 @@
 package com.bobbins;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
@@ -35,7 +36,13 @@ public class Main {
         // in com.bobbins package
         return new ResourceConfig()
                .packages("com.bobbins")
-               .register(createMoxyJsonResolver());
+               .register(createMoxyJsonResolver())  //Json stuff.
+               .register(new AbstractBinder(){     //DI stuff.
+                   @Override
+                    protected void configure(){
+                       bindFactory(PlayerFactory.class).to(Player.class);
+                   }
+                });
     }
 
     public static ContextResolver<MoxyJsonConfig> createMoxyJsonResolver() {

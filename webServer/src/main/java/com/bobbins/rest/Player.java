@@ -1,10 +1,10 @@
 package com.bobbins.rest;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.bobbins.EventSendingListener;
-import com.bobbins.PlayerFactory;
 import com.bobbins.PlayerListener;
 import com.bobbins.model.PlayingStatusBean;
 import org.glassfish.jersey.media.sse.EventOutput;
@@ -15,10 +15,7 @@ public class Player {
 
     private com.bobbins.Player player;
 
-    public Player(){
-      this(PlayerFactory.getPlayer());
-    }
-
+    @Inject
     public Player(com.bobbins.Player player){
       this.player = player;
     }

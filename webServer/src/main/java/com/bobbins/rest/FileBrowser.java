@@ -1,5 +1,6 @@
 package com.bobbins.rest;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -15,10 +16,7 @@ public class FileBrowser {
 
     private com.bobbins.Player player;
 
-    public FileBrowser(){
-      this(PlayerFactory.getPlayer());
-    }
-
+    @Inject
     public FileBrowser(com.bobbins.Player player){
       this.player = player;
     }

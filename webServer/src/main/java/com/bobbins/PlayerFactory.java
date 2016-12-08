@@ -1,13 +1,13 @@
 package com.bobbins;
 
-/**
- * Created by james on 26/03/2016.
- */
-public class PlayerFactory {
+import org.glassfish.hk2.api.Factory;
+
+public class PlayerFactory implements Factory<Player> {
 
     private static Player instance = null;
 
-    public static synchronized Player getPlayer(){
+    @Override
+    public Player provide() {
         if (instance == null){
             try {
                 instance = new MPDPlayer();
@@ -18,5 +18,10 @@ public class PlayerFactory {
             }
         }
         return instance;
+    }
+
+    @Override
+    public void dispose(Player player) {
+        //Nothing to do.
     }
 }

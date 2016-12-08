@@ -1,9 +1,9 @@
 package com.bobbins.rest;
 
-import com.bobbins.PlayerFactory;
 import com.bobbins.Player;
 import com.bobbins.model.PlaylistBean;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -12,10 +12,7 @@ public class Playlist {
 
     private Player player;
 
-    public Playlist(){
-      this(PlayerFactory.getPlayer());
-    }
-
+    @Inject
     public Playlist(Player player){
       this.player = player;
     }
