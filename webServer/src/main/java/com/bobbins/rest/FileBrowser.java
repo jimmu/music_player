@@ -39,7 +39,6 @@ public class FileBrowser {
     @Path("{artist}/{album}")
     public List<FilesystemEntryBean> list(@PathParam("artist") String artist,
                                           @PathParam("album") String album) {
-        System.out.println("Listing "+artist+"/"+album);
         return player.list(artist, album);
     }
 
