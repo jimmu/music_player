@@ -83,7 +83,7 @@ public class Player {
     @Produces(SseFeature.SERVER_SENT_EVENTS)
     @Path("events")
     public EventOutput getServerSentEvents(){
-	final EventOutput eventOutput = new EventOutput();
+	    final EventOutput eventOutput = new EventOutput();
         System.out.println("**** Creating a new event sender");
         PlayerListener listener = new EventSendingListener(eventOutput);
         player.listenForChanges(listener);

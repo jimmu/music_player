@@ -1,11 +1,12 @@
 package com.bobbins.rest;
 
 import com.bobbins.AbstractPlayer;
-import com.bobbins.PlayerListener;
 import com.bobbins.model.PlayingStatusBean;
+import org.glassfish.jersey.media.sse.EventOutput;
 import org.junit.Before;
 import org.junit.Test;
 
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -43,11 +44,6 @@ public class PlayerTest {
             }
 
             @Override
-            public void listenForChanges(PlayerListener listener) {
-
-            }
-
-            @Override
             public PlayingStatusBean next() {
                 return new PlayingStatusBean("next", 50, true, 100, 0L);
             }
@@ -66,6 +62,7 @@ public class PlayerTest {
             public PlayingStatusBean seek(int positionInSeconds) {
                 return new PlayingStatusBean("seek", 50, true, 100, (long)positionInSeconds);
             }
+
         };
     }
 
@@ -80,7 +77,7 @@ public class PlayerTest {
     @Test
     public void testPlayAlbum(){
         Player playerService = new Player(player);
-        PlayingStatusBean status = playerService.play("artist1", "album1", null);
+        PlayingStatusBean status = playerService.play("artist1", "album1");
         assertEquals("song1", status.name);
         assertTrue(status.isPlaying);
     }
@@ -88,7 +85,7 @@ public class PlayerTest {
     @Test
     public void testPlayArtist(){
         Player playerService = new Player(player);
-        PlayingStatusBean status = playerService.play("artist1", null, null);
+        PlayingStatusBean status = playerService.play("artist1");
         assertEquals("song1", status.name);
         assertTrue(status.isPlaying);
     }
@@ -141,4 +138,10 @@ public class PlayerTest {
         assertEquals(Long.valueOf(123), playerService.seek(123).elapsedTime);
     }
 
+    @Test
+    public void testGetServerSentEvents(){
+        Player playerService = new Player(player);
+        EventOutput eventOut = playerService.getServerSentEvents();
+        assertNotNull(eventOut);
+    }
 }

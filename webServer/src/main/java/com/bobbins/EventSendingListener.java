@@ -20,12 +20,13 @@ public class EventSendingListener implements PlayerListener {
     private PlaylistBean lastSentPlaylist = null;
     private PlaylistBean latestPlaylist;
     private boolean stop;
+    private Thread senderThread;
 
     public EventSendingListener(final EventOutput eventOutput){
         latestState = null;
         latestPlaylist = null;
         stop = false;
-        new Thread(new Runnable() {
+        senderThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!stop){
@@ -97,10 +98,14 @@ public class EventSendingListener implements PlayerListener {
                     //ok
                 }
             }
-        }).start();
+        });
+        senderThread.setDaemon(true);
     }
 
     public synchronized void onChange(PlayingStatusBean state){
+        if (!senderThread.isAlive()){
+            senderThread.start();
+        }
         if (state == null){
             stop = true;
         }
@@ -114,6 +119,9 @@ public class EventSendingListener implements PlayerListener {
 
     @Override
     public void onPlaylistChange(PlaylistBean playlist){
+        if (!senderThread.isAlive()){
+            senderThread.start();
+        }
 	    if (playlist != null){
 	        if (!playlist.equals(lastSentPlaylist)) {
                 latestPlaylist = playlist;
