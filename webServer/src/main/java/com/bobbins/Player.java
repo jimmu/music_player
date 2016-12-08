@@ -6,9 +6,6 @@ import com.bobbins.model.PlaylistBean;
 
 import java.util.List;
 
-/**
- * Created by james on 26/03/2016.
- */
 public interface Player {
 
     PlaylistBean getPlaylist();
