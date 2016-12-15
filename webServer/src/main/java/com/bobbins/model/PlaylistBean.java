@@ -51,7 +51,6 @@ public class PlaylistBean {
         if (other.getClass() != getClass()){return false;}
         PlaylistBean otherBean = (PlaylistBean)other;
         return new EqualsBuilder()
-                .appendSuper(super.equals(other))
                 .append(trackList, otherBean.trackList)
                 .append(trackCount, otherBean.trackCount)
                 .append(currentTrackNumber, otherBean.currentTrackNumber)

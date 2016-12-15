@@ -30,11 +30,30 @@ public class PlayingStatusBeanTest {
 
     @Test
     public void testEquals(){
-        
+        PlayingStatusBean bean = new PlayingStatusBean("name", 25, Boolean.TRUE, 100, 3L);
+        PlayingStatusBean similarBean = new PlayingStatusBean("name", 25, Boolean.TRUE, 100, 3L);
+        System.out.println(bean.equals(similarBean));
+        assertEquals(bean, similarBean);
     }
 
     @Test
-    public void testHashCode(){
+    public void testNotEquals(){
+        PlayingStatusBean bean = new PlayingStatusBean("name", 25, Boolean.TRUE, 100, 3L);
+        PlayingStatusBean dissimilarBean = new PlayingStatusBean("name", 26, Boolean.TRUE, 100, 3L);
+        assertFalse(bean.equals(dissimilarBean));
+    }
 
+    @Test
+    public void testHashCodeEqualObjects(){
+        PlayingStatusBean bean = new PlayingStatusBean("name", 25, Boolean.TRUE, 100, 3L);
+        PlayingStatusBean similarBean = new PlayingStatusBean("name", 25, Boolean.TRUE, 100, 3L);
+        assertEquals(bean.hashCode(), similarBean.hashCode());
+    }
+
+    @Test
+    public void testHashCodeUnequalObjects(){
+        PlayingStatusBean bean = new PlayingStatusBean("name", 25, Boolean.TRUE, 100, 3L);
+        PlayingStatusBean dissimilarBean = new PlayingStatusBean("name", 26, Boolean.TRUE, 100, 3L);
+        assertFalse(bean.hashCode() == dissimilarBean.hashCode());
     }
 }

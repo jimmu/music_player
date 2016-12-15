@@ -80,7 +80,6 @@ public class PlayingStatusBean {
     if (other.getClass() != getClass()){return false;}
     PlayingStatusBean otherBean = (PlayingStatusBean)other;
     return new EqualsBuilder()
-            .appendSuper(super.equals(other))
             .append(name, otherBean.name)
             .append(status, otherBean.status)
             .append(stopActionUrl, otherBean.stopActionUrl)
