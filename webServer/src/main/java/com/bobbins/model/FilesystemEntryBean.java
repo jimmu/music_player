@@ -1,5 +1,8 @@
 package com.bobbins.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -52,4 +55,28 @@ public class FilesystemEntryBean {
   public String toString(){
     return "[artist: "+artist+", album: "+album+", song: "+song+", name: "+name+"]";
   }
+
+  @Override
+  public boolean equals(Object other){
+    if (other == null){return false;}
+    if (other == this){return true;}
+    if (other.getClass() != getClass()){return false;}
+    FilesystemEntryBean otherBean = (FilesystemEntryBean) other;
+    return new EqualsBuilder()
+            .append(artist, otherBean.artist)
+            .append(album, otherBean.album)
+            .append(song, otherBean.song)
+            .isEquals();
+  }
+
+  @Override
+  public int hashCode(){
+    return new HashCodeBuilder(17,37)
+            .append(artist)
+            .append(album)
+            .append(song)
+            .toHashCode();
+  }
+
+
 }

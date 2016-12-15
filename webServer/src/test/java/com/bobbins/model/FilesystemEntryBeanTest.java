@@ -46,4 +46,32 @@ public class FilesystemEntryBeanTest {
         assertTrue(bean.toString().contains("album1"));
         assertTrue(bean.toString().contains("song1"));
     }
+
+    @Test
+    public void testEquals(){
+        FilesystemEntryBean bean = new FilesystemEntryBean("artist1", "album1", "song1");
+        FilesystemEntryBean similarBean = new FilesystemEntryBean("artist1", "album1", "song1");
+        assertEquals(bean, similarBean);
+    }
+
+    @Test
+    public void testNotEquals(){
+        FilesystemEntryBean bean = new FilesystemEntryBean("artist1", "album1", "song1");
+        FilesystemEntryBean dissimilarBean = new FilesystemEntryBean("artist1", "album2", "song1");
+        assertFalse(bean.equals(dissimilarBean));
+    }
+
+    @Test
+    public void testHashCodeEqualObjects(){
+        FilesystemEntryBean bean = new FilesystemEntryBean("artist1", "album1", "song1");
+        FilesystemEntryBean similarBean = new FilesystemEntryBean("artist1", "album1", "song1");
+        assertTrue(bean.hashCode() == similarBean.hashCode());
+    }
+
+    @Test
+    public void testHashCodeUnequalObjects(){
+        FilesystemEntryBean bean = new FilesystemEntryBean("artist1", "album1", "song1");
+        FilesystemEntryBean similarBean = new FilesystemEntryBean("artist1", "album1", "song2");
+        assertFalse(bean.hashCode() == similarBean.hashCode());
+    }
 }
