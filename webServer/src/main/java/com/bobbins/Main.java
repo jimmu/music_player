@@ -1,5 +1,7 @@
 package com.bobbins;
 
+import org.glassfish.grizzly.http.server.CLStaticHttpHandler;
+import org.glassfish.grizzly.http.server.HttpHandler;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -19,7 +21,7 @@ import javax.ws.rs.ext.ContextResolver;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://0.0.0.0:8080/music/";
+    public static final String BASE_URI = "http://0.0.0.0:8080/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -28,7 +30,11 @@ public class Main {
     public static HttpServer startServer() {
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI
-        return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), createApp());
+        HttpServer server =  GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), createApp());
+        // Add a second http server for static content.
+        HttpHandler staticContentHandler = new CLStaticHttpHandler(Main.class.getClassLoader());
+        server.getServerConfiguration().addHttpHandler(staticContentHandler,"/gui");
+        return server;
     }
 
     public static ResourceConfig createApp(){ 
